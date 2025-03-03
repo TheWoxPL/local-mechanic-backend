@@ -1,2 +1,2 @@
 export * from './shared';
-export * from './internal/helpers';
+export * from './internal';
