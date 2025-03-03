@@ -1,12 +1,10 @@
-const expectedTypes = [
-  'fix',
-  'feat'
-];
+const expectedTypes = ['fix', 'feat'];
 
 module.exports = {
   plugins: [
     {
       rules: {
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
         'custom-type-enum': ({ type }) => {
           if (!expectedTypes.includes(type)) {
             return [
