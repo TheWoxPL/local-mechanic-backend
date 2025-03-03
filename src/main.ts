@@ -13,7 +13,7 @@ async function bootstrap(): Promise<void> {
 
   const logger = new Logger('Bootstrap');
   logger.log(
-    `Server running on: http://${process.env.HOST_NAME}:${process.env.HOST_PORT}`
+    `Server running on: http://${process.env.HOST_NAME}:${process.env.HOST_PORT}`,
   );
 }
 bootstrap();

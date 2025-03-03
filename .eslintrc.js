@@ -10,7 +10,7 @@ module.exports = {
     '@typescript-eslint',
     'prefer-arrow',
     'unicorn',
-    'prettier'
+    'prettier',
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',
