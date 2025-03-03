@@ -40,13 +40,6 @@ export class UserAccount extends BaseClass {
   })
   role!: string[];
 
-  @Prop({
-    required: true,
-    default: [],
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Group',
-  })
-  groups!: string[];
   @Prop({ required: true, type: String })
   firebaseId!: string[];
 }
