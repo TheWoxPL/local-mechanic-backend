@@ -3,14 +3,14 @@ module.exports = {
   parserOptions: {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   plugins: [
     '@typescript-eslint/eslint-plugin',
     '@typescript-eslint',
     'prefer-arrow',
     'unicorn',
-    'prettier',
+    'prettier'
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',
@@ -18,12 +18,12 @@ module.exports = {
     'eslint:recommended',
     'plugin:n/recommended',
     'eslint:recommended',
-    'plugin:prettier/recommended',
+    'plugin:prettier/recommended'
   ],
   root: true,
   env: {
     node: true,
-    jest: true,
+    jest: true
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
@@ -50,8 +50,8 @@ module.exports = {
         vars: 'all',
         args: 'all',
         argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      },
+        varsIgnorePattern: '^_'
+      }
     ],
     'n/no-missing-import': 'off',
     'no-unused-vars': 'off',
@@ -62,54 +62,54 @@ module.exports = {
     'n/no-unsupported-features/node-builtins': [
       'error',
       {
-        ignores: ['fetch'],
-      },
+        ignores: ['fetch']
+      }
     ],
     '@typescript-eslint/naming-convention': [
       'error',
       {
         selector: 'default',
-        format: null,
+        format: null
       },
       {
         selector: 'variable',
         format: ['PascalCase', 'UPPER_CASE', 'camelCase'],
-        types: ['boolean'],
+        types: ['boolean']
       },
       {
         selector: 'variableLike',
-        format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+        format: ['camelCase', 'UPPER_CASE', 'PascalCase']
       },
 
       {
         selector: 'parameter',
-        format: ['camelCase'],
+        format: ['camelCase']
       },
       {
         selector: 'memberLike',
         modifiers: ['private'],
         format: ['camelCase'],
-        leadingUnderscore: 'forbid',
+        leadingUnderscore: 'forbid'
       },
       {
         selector: 'typeLike',
-        format: ['PascalCase'],
+        format: ['PascalCase']
       },
       {
         selector: 'property',
         modifiers: ['readonly'],
-        format: ['PascalCase', 'UPPER_CASE'],
+        format: ['PascalCase', 'UPPER_CASE']
       },
       {
         selector: 'enumMember',
-        format: ['UPPER_CASE'],
-      },
+        format: ['UPPER_CASE']
+      }
     ],
     'max-nested-callbacks': [
       'error',
       {
-        max: 5,
-      },
+        max: 5
+      }
     ],
     'no-lonely-if': 'warn',
     'no-multiple-empty-lines': [
@@ -117,10 +117,10 @@ module.exports = {
       {
         max: 2,
         maxEOF: 1,
-        maxBOF: 0,
-      },
+        maxBOF: 0
+      }
     ],
     'no-self-compare': 'error',
-    'no-console': 'warn',
-  },
+    'no-console': 'warn'
+  }
 };

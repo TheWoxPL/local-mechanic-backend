@@ -9,15 +9,15 @@ module.exports = {
           if (!expectedTypes.includes(type)) {
             return [
               false,
-              `Type must be one of: ${expectedTypes.join(', ')} \nExample: feat: add new feature`,
+              `Type must be one of: ${expectedTypes.join(', ')} \nExample: feat: add new feature`
             ];
           }
           return [true];
-        },
-      },
-    },
+        }
+      }
+    }
   ],
   rules: {
-    'custom-type-enum': [2, 'always'],
-  },
+    'custom-type-enum': [2, 'always']
+  }
 };

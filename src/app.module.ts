@@ -2,6 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoConnectionString } from './libs/';
+import { UpsertDefaultsService } from './upsert-defaults/upsert-defaults.service';
+import { MongooseModels } from './models';
+import { AppController } from './app.controller';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -14,9 +18,10 @@ import { getMongoConnectionString } from './libs/';
       useFactory: async (configService: ConfigService) => ({
         uri: getMongoConnectionString(configService)
       })
-    })
+    }),
+    MongooseModule.forFeature(MongooseModels)
   ],
-  controllers: [],
-  providers: []
+  controllers: [AppController],
+  providers: [UpsertDefaultsService]
 })
 export class AppModule {}

@@ -1,7 +1,6 @@
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
 import { HttpExceptionFilter } from './libs';
 
 async function bootstrap(): Promise<void> {
