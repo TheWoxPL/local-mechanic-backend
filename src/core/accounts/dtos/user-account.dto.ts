@@ -21,9 +21,6 @@ export class UserAccountDto extends AccountBasicDto {
   @IsDefined()
   status!: SystemStatus;
 
-  @Expose()
-  firebaseId!: string;
-
   get fullName(): string {
     const fullName = [this.firstName, this.lastName].filter(Boolean).join(' ');
     if (fullName) {

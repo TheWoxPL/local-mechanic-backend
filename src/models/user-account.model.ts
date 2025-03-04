@@ -39,9 +39,6 @@ export class UserAccount extends BaseClass {
     ref: 'Role'
   })
   role!: string[];
-
-  @Prop({ required: true, type: String })
-  firebaseId!: string[];
 }
 
 export const UserAccountSchema = SchemaFactory.createForClass(UserAccount);
