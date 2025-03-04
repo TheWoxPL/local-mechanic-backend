@@ -12,7 +12,7 @@ export abstract class BaseDto extends BasicDto {
         return undefined;
       }
     },
-    { toClassOnly: true },
+    { toClassOnly: true }
   )
   @Type(() => Date)
   createdAt?: Date;

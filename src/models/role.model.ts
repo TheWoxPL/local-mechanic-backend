@@ -6,14 +6,14 @@ export class PermissionRule {
   @Prop({
     required: true,
     trim: true,
-    lowercase: true,
+    lowercase: true
   })
   action!: Action;
 
   @Prop({
     required: true,
     trim: true,
-    lowercase: true,
+    lowercase: true
   })
   subject!: Subject;
 }
@@ -23,7 +23,7 @@ export class Role extends BaseClass {
   @Prop({
     required: true,
     trim: true,
-    maxlength: FieldConstraints.NAME.MAX_LENGTH,
+    maxlength: FieldConstraints.NAME.MAX_LENGTH
   })
   name!: string;
 
@@ -37,7 +37,7 @@ export class Role extends BaseClass {
       } else {
         return [value];
       }
-    },
+    }
   })
   permissions!: PermissionRule[];
 }

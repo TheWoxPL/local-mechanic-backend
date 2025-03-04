@@ -12,7 +12,7 @@ export abstract class BasicDto {
         return undefined;
       }
     },
-    { toClassOnly: true },
+    { toClassOnly: true }
   )
   id!: string;
 }

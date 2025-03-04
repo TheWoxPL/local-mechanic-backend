@@ -16,7 +16,7 @@ export abstract class BasicAccount extends BasicClass {
     required: true,
     default: [],
     type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Role',
+    ref: 'Role'
   })
   roles!: string[];
 
@@ -25,14 +25,14 @@ export abstract class BasicAccount extends BasicClass {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'UserAccount',
     readonly: true,
-    select: false,
+    select: false
   })
   createdBy?: string;
 
   @Prop({
     required: true,
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'UserAccount',
+    ref: 'UserAccount'
   })
   updatedBy!: string;
 }

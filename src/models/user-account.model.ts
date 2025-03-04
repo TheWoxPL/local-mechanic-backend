@@ -10,19 +10,19 @@ export class UserAccount extends BaseClass {
     unique: true,
     trim: true,
     sparse: true,
-    maxlength: FieldConstraints.USERNAME.MAX_LENGTH,
+    maxlength: FieldConstraints.USERNAME.MAX_LENGTH
   })
   username!: string;
 
   @Prop({
     required: false,
-    maxlength: FieldConstraints.FIRST_NAME.MAX_LENGTH,
+    maxlength: FieldConstraints.FIRST_NAME.MAX_LENGTH
   })
   firstName?: string;
 
   @Prop({
     required: false,
-    maxlength: FieldConstraints.LAST_NAME.MAX_LENGTH,
+    maxlength: FieldConstraints.LAST_NAME.MAX_LENGTH
   })
   lastName?: string;
 
@@ -36,7 +36,7 @@ export class UserAccount extends BaseClass {
     required: true,
     default: [],
     type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Role',
+    ref: 'Role'
   })
   role!: string[];
 

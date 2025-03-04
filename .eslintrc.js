@@ -17,7 +17,8 @@ module.exports = {
     'plugin:prettier/recommended',
     'eslint:recommended',
     'plugin:n/recommended',
-    'prettier',
+    'eslint:recommended',
+    'plugin:prettier/recommended',
   ],
   root: true,
   env: {
@@ -26,9 +27,8 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': ['error'],
-    'prettier/prettier': 'error',
+    'prettier/prettier': ['error', { trailingComma: 'none' }],
+    'comma-dangle': ['error', 'never'],
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
     'no-eval': 'error',

@@ -1,4 +1,4 @@
 export enum SystemStatus {
   ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  INACTIVE = 'INACTIVE'
 }

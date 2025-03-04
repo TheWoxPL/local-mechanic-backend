@@ -6,17 +6,17 @@ import { getMongoConnectionString } from './libs/';
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env.local', '.env'],
-      isGlobal: true,
+      isGlobal: true
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        uri: getMongoConnectionString(configService),
-      }),
-    }),
+        uri: getMongoConnectionString(configService)
+      })
+    })
   ],
   controllers: [],
-  providers: [],
+  providers: []
 })
 export class AppModule {}

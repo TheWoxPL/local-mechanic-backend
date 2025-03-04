@@ -9,11 +9,11 @@ export const MongooseModels: ModelDefinition[] = [
   {
     name: Role.name,
     schema: RoleSchema,
-    collection: 'roles',
+    collection: 'roles'
   },
   {
     name: UserAccount.name,
     schema: UserAccountSchema,
-    collection: 'userAccounts',
-  },
+    collection: 'userAccounts'
+  }
 ];
