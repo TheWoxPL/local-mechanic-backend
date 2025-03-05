@@ -5,7 +5,7 @@ module.exports = {
     {
       rules: {
         // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        'custom-type-enum': ({ type }) => {
+        'custom-type-enum': ({ type }: { type: string }) => {
           if (!expectedTypes.includes(type)) {
             return [
               false,

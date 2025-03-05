@@ -31,7 +31,7 @@ export class Role extends BaseClass {
     default: [],
     type: () => Object,
     _id: false,
-    set: (value) => {
+    set: (value: unknown) => {
       if (value instanceof Array) {
         return value;
       } else {
