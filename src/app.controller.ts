@@ -14,4 +14,16 @@ export class AppController {
   getAdminRoute(): string {
     return 'This is an admin route';
   }
+
+  @Get('customer-route')
+  @Permissions(AppPermissions.APP.DISPLAY)
+  getCustomerRoute(): string {
+    return 'This is a customer route';
+  }
+
+  @Get('entrepreneur-route')
+  @Permissions(AppPermissions.APP.DISPLAY)
+  getEntrepreneurRoute(): string {
+    return 'This is a entrepreneur route';
+  }
 }
