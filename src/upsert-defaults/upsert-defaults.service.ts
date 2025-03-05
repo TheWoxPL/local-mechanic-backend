@@ -18,7 +18,7 @@ export class UpsertDefaultsService implements OnModuleInit {
     private readonly userAccountModel: Model<UserAccount>,
     @InjectModel(Role.name)
     private readonly roleModel: Model<Role>
-  ) { }
+  ) {}
 
   async onModuleInit(): Promise<void> {
     await this.upsertDefaults();
