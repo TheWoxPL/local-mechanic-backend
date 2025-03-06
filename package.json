@@ -1,5 +1,9 @@
 {
   "name": "local-mechanic-backend",
+  "config": {
+    "host_name": "localhost",
+    "host_port": "4455"
+  },
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -20,7 +24,9 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky",
-    "prepare:dev": "docker-compose -f docker/docker-compose.yml up -d"
+    "prepare:dev": "docker-compose -f docker/docker-compose.yml up -d",
+    "generate-api-json": "curl -o local-mechanic-api.json http://$npm_package_config_host_name:$npm_package_config_host_port/api-json",
+    "firebase-emulator:start": "firebase emulators:start"
   },
   "dependencies": {
     "@nestjs/cli": "^10.4.2",
@@ -29,6 +35,7 @@
     "@nestjs/core": "^11.0.11",
     "@nestjs/mongoose": "^11.0.1",
     "@nestjs/platform-express": "^11.0.11",
+    "@nestjs/swagger": "^11.0.6",
     "@types/express-session": "^1.18.1",
     "@types/lodash": "^4.17.16",
     "@types/uuid": "^10.0.0",
@@ -43,6 +50,7 @@
     "mongoose": "^8.11.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './libs';
+import { HttpExceptionFilter, SwaggerSetup } from './libs';
 import { corsConfig, sessionConfig } from './config';
 import * as session from 'express-session';
 
@@ -13,6 +13,9 @@ async function bootstrap(): Promise<void> {
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api/v1');
   app.useGlobalFilters(new HttpExceptionFilter());
+  if (process.env.NODE_ENV === 'development') {
+    SwaggerSetup(app);
+  }
   await app.listen(`${process.env.HOST_PORT}`);
 
   const logger = new Logger('Bootstrap');
