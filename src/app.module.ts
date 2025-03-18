@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { APP_GUARD } from '@nestjs/core';
 import { PermissionsGuard } from './libs/internal/guards/permissions.guard';
 import { AuthModule } from './auth/auth.module';
+import { CompaniesModule } from './core/companies/companies.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { AuthModule } from './auth/auth.module';
       })
     }),
     MongooseModule.forFeature(MongooseModels),
-    AuthModule
+    AuthModule,
+    CompaniesModule
   ],
   controllers: [AppController],
   providers: [

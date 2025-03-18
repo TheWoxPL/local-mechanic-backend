@@ -14,6 +14,6 @@ import { AccountsController } from './controllers/accounts.controller';
   ],
   controllers: [AccountsController],
   providers: [AccountsService, UpsertDefaultsService],
-  exports: [AccountsService]
+  exports: [AccountsService, MongooseModule]
 })
 export class AccountsModule {}

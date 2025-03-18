@@ -50,16 +50,6 @@ export class PermissionsGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.split(' ')[1];
-
-    if (!token) throw new UnauthorizedException('No token provided');
-
-    try {
-      const decodedToken = await this.authService.verifyToken(token, request);
-      request.user = decodedToken;
-    } catch (error) {
-      throw new UnauthorizedException(error);
-    }
-
     const requiredPermissions =
       this.reflector.get<RequiredPermissions[]>(
         PERMISSION_KEY,
@@ -69,9 +59,19 @@ export class PermissionsGuard implements CanActivate {
         PERMISSION_KEY,
         context.getClass()
       );
+
     if (!requiredPermissions || !requiredPermissions.length) {
       return true;
     }
+
+    if (!token) throw new UnauthorizedException('No token provided');
+    try {
+      const decodedToken = await this.authService.verifyToken(token, request);
+      request.user = decodedToken;
+    } catch (error) {
+      throw new UnauthorizedException(error);
+    }
+
 
     const session = request.session;
     return this.matchRoles(requiredPermissions, session.user.permissions || []);
