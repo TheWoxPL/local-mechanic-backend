@@ -8,13 +8,11 @@ import { AccountsModule } from '../accounts/accounts.module';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      { name: Company.name, schema: CompanySchema }
-    ]),
+    MongooseModule.forFeature([{ name: Company.name, schema: CompanySchema }]),
     AccountsModule
   ],
   controllers: [CompaniesController],
   providers: [CompaniesService, UpsertDefaultsService],
   exports: []
 })
-export class CompaniesModule { }
+export class CompaniesModule {}

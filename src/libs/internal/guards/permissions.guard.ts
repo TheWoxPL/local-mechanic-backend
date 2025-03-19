@@ -72,7 +72,6 @@ export class PermissionsGuard implements CanActivate {
       throw new UnauthorizedException(error);
     }
 
-
     const session = request.session;
     return this.matchRoles(requiredPermissions, session.user.permissions || []);
   }

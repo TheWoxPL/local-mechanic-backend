@@ -13,12 +13,13 @@ export class CompaniesService {
     @InjectModel(Company.name)
     private companyModel: Model<Company>,
     private accountsService: AccountsService
-  ) { }
+  ) {}
 
-
-  async create(createCompanyDto: CreateCompanyDTO, userEmail: string): Promise<CompanyDTO> {
-    const currentUser = await this.accountsService.findByEmail(userEmail)
-    console.log(currentUser.id)
+  async create(
+    createCompanyDto: CreateCompanyDTO,
+    userEmail: string
+  ): Promise<CompanyDTO> {
+    const currentUser = await this.accountsService.findByEmail(userEmail);
 
     const createCompanyDoc = new this.companyModel();
     createCompanyDoc.companyName = createCompanyDto.companyName;
