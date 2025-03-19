@@ -6,6 +6,7 @@ import { Company } from 'src/models/company.model';
 import { CreateCompanyDTO } from '../dtos/create-company.dto';
 import { CompanyDTO } from '../dtos/company.dto';
 import { AccountsService } from 'src/core/accounts/services/accounts.service';
+import { RoleType } from 'src/libs';
 
 @Injectable()
 export class CompaniesService {
@@ -31,6 +32,7 @@ export class CompaniesService {
     createCompanyDoc.updatedBy = currentUser.id;
 
     const result = await createCompanyDoc.save();
+    this.accountsService.addRole(RoleType.ENTREPRENEUR, userEmail);
     return plainToClass(CompanyDTO, result, {
       excludeExtraneousValues: true
     });

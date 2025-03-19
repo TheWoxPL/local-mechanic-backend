@@ -64,27 +64,22 @@ export class AccountsService {
   }
 
   async addRole(roleName: string, email: string): Promise<string> {
-    try {
-      const role =
-        roleName === RoleType.CUSTOMER
-          ? await this.upsertDefaultsService.getCustomerRole()
-          : await this.upsertDefaultsService.getEntrepreneurRole();
+    const role =
+      roleName === RoleType.CUSTOMER
+        ? await this.upsertDefaultsService.getCustomerRole()
+        : await this.upsertDefaultsService.getEntrepreneurRole();
 
-      if (!role) {
-        throw new ConflictException('Role not found.');
-      }
-
-      const userAccount = await this.userAccountModel.findOne({ email }).exec();
-      if (!userAccount!.role.includes(role.id)) {
-        userAccount!.role.push(role.id);
-        await userAccount!.save();
-        return `${roleName} role added.`;
-      } else {
-        throw new ConflictException(`${roleName} role already assigned.`);
-      }
-    } catch (error) {
-      throw new ConflictException(`${roleName} role already assigned.`);
+    if (!role) {
+      throw new ConflictException('Role not found.');
     }
+
+    const userAccount = await this.userAccountModel.findOne({ email }).exec();
+    if (!userAccount!.role.includes(role.id)) {
+      userAccount!.role.push(role.id);
+      await userAccount!.save();
+      return `${roleName} role added.`;
+    }
+    return `${roleName} role already exists.`;
   }
 
   async hasAnyRoleByEmail(email: string): Promise<boolean> {
