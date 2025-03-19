@@ -1,8 +1,8 @@
-import { ValidationPipe, Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { HttpExceptionFilter, SwaggerSetup } from './libs';
-import { corsConfig, sessionConfig } from './config';
+import {ValidationPipe, Logger} from '@nestjs/common';
+import {NestFactory} from '@nestjs/core';
+import {AppModule} from './app.module';
+import {HttpExceptionFilter, SwaggerSetup} from './libs';
+import {corsConfig, sessionConfig} from './config';
 import * as session from 'express-session';
 
 async function bootstrap(): Promise<void> {

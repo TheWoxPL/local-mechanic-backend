@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppPermissions } from './libs';
-import { Permissions } from './libs/shared/decorators/permissions.decorator';
+import {Controller, Get} from '@nestjs/common';
+import {AppPermissions} from './libs';
+import {Permissions} from './libs/shared/decorators/permissions.decorator';
 
 @Controller()
 export class AppController {

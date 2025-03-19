@@ -1,9 +1,9 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
+import {Exclude, Expose, Transform} from 'class-transformer';
 @Exclude()
 export abstract class BasicDto {
   @Expose()
   @Transform(
-    ({ value, obj }) => {
+    ({value, obj}) => {
       if (value && typeof value === 'string') {
         return value;
       } else if (obj._id) {
@@ -12,7 +12,7 @@ export abstract class BasicDto {
         return undefined;
       }
     },
-    { toClassOnly: true }
+    {toClassOnly: true}
   )
   id!: string;
 }

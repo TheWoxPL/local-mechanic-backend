@@ -1,8 +1,8 @@
-import { Controller, Req } from '@nestjs/common';
-import { AccountsService } from '../services/accounts.service';
-import { Post } from '@nestjs/common';
-import { Request } from 'express';
-import { RoleType } from 'src/libs';
+import {Controller, Req} from '@nestjs/common';
+import {AccountsService} from '../services/accounts.service';
+import {Post} from '@nestjs/common';
+import {Request} from 'express';
+import {RoleType} from 'src/libs';
 
 @Controller('accounts')
 export class AccountsController {

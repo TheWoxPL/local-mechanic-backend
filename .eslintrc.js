@@ -18,7 +18,8 @@ module.exports = {
     'eslint:recommended',
     'plugin:n/recommended',
     'eslint:recommended',
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
+    'prettier'
   ],
   root: true,
   env: {
@@ -27,6 +28,9 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    "prettier/prettier": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "no-console": "warn",
     'prettier/prettier': ['error', { trailingComma: 'none' }],
     'comma-dangle': ['error', 'never'],
     'no-use-before-define': 'off',

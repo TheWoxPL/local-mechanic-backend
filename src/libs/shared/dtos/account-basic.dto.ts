@@ -1,5 +1,5 @@
-import { Expose } from 'class-transformer';
-import { BasicDto } from './basic.dto';
+import {Expose} from 'class-transformer';
+import {BasicDto} from './basic.dto';
 
 export abstract class AccountBasicDto extends BasicDto {
   @Expose()

@@ -1,11 +1,11 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { plainToClass } from 'class-transformer';
-import { Connection, HydratedDocument, Model } from 'mongoose';
-import { UserAccountDto } from '../core/accounts/dtos';
-import { MongooseModels, UserAccount, Role } from '../models';
-import { Types } from 'mongoose';
-import { AppPermissions, RoleType } from 'src/libs';
+import {Injectable, Logger, OnModuleInit} from '@nestjs/common';
+import {InjectConnection, InjectModel} from '@nestjs/mongoose';
+import {plainToClass} from 'class-transformer';
+import {Connection, HydratedDocument, Model} from 'mongoose';
+import {UserAccountDto} from '../core/accounts/dtos';
+import {MongooseModels, UserAccount, Role} from '../models';
+import {Types} from 'mongoose';
+import {AppPermissions, RoleType} from 'src/libs';
 
 @Injectable()
 export class UpsertDefaultsService implements OnModuleInit {
@@ -41,7 +41,7 @@ export class UpsertDefaultsService implements OnModuleInit {
         );
       }
       let collectionAdded = false;
-      const db = this.connection.useDb(dbName, { useCache: true });
+      const db = this.connection.useDb(dbName, {useCache: true});
       if (db.db === undefined) {
         throw new Error(
           'There is no database connection. Check the connection string.'
@@ -78,7 +78,7 @@ export class UpsertDefaultsService implements OnModuleInit {
     if (!this.systemAccount) {
       const username = 'SYSTEM';
       let systemAccount = await this.userAccountModel
-        .findOne({ username })
+        .findOne({username})
         .exec();
 
       if (!systemAccount) {
@@ -102,9 +102,7 @@ export class UpsertDefaultsService implements OnModuleInit {
   private async upsertAdminAccount(): Promise<HydratedDocument<UserAccount>> {
     if (!this.adminAccount) {
       const username = 'ADMIN';
-      let adminAccount = await this.userAccountModel
-        .findOne({ username })
-        .exec();
+      let adminAccount = await this.userAccountModel.findOne({username}).exec();
 
       if (!adminAccount) {
         adminAccount = new this.userAccountModel();
@@ -137,9 +135,9 @@ export class UpsertDefaultsService implements OnModuleInit {
 
   private async createRoleIfNotExists(
     name: string,
-    permissions: { action: string; subject: string }[]
+    permissions: {action: string; subject: string}[]
   ): Promise<void> {
-    const role = await this.roleModel.findOne({ name });
+    const role = await this.roleModel.findOne({name});
     if (!role) {
       const systemUser = new Types.ObjectId((await this.getSystemAccount()).id);
       const newRole = new this.roleModel({
@@ -155,12 +153,12 @@ export class UpsertDefaultsService implements OnModuleInit {
     }
   }
   async getCustomerRole(): Promise<HydratedDocument<Role> | null> {
-    return this.roleModel.findOne({ name: RoleType.CUSTOMER }).exec();
+    return this.roleModel.findOne({name: RoleType.CUSTOMER}).exec();
   }
   async getEntrepreneurRole(): Promise<HydratedDocument<Role> | null> {
-    return this.roleModel.findOne({ name: RoleType.ENTREPRENEUR }).exec();
+    return this.roleModel.findOne({name: RoleType.ENTREPRENEUR}).exec();
   }
   async getAdminRole(): Promise<HydratedDocument<Role> | null> {
-    return this.roleModel.findOne({ name: RoleType.ADMIN }).exec();
+    return this.roleModel.findOne({name: RoleType.ADMIN}).exec();
   }
 }

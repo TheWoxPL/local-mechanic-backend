@@ -1,11 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { FirebaseService } from './firebase.service';
-import { PermissionRule } from 'src/models';
-import { AccountsService } from 'src/core/accounts/services/accounts.service';
-import { CreateUserAccountDto } from 'src/core/accounts/dtos';
-import { Request } from 'express';
-import { uniqWith, isEqual } from 'lodash';
-import { ResponseTokenDTO } from './dtos';
+import {Injectable, UnauthorizedException} from '@nestjs/common';
+import {FirebaseService} from './firebase.service';
+import {PermissionRule} from 'src/models';
+import {AccountsService} from 'src/core/accounts/services/accounts.service';
+import {CreateUserAccountDto} from 'src/core/accounts/dtos';
+import {Request} from 'express';
+import {uniqWith, isEqual} from 'lodash';
+import {ResponseTokenDTO} from './dtos';
 
 @Injectable()
 export class AuthService {

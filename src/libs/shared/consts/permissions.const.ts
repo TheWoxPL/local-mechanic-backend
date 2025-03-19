@@ -1,4 +1,4 @@
-import { Subject, Action } from '../enums/';
+import {Subject, Action} from '../enums/';
 
 export class AppPermissions {
   static readonly ADMIN = {

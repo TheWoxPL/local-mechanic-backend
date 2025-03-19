@@ -1,7 +1,7 @@
-import { Expose, Type } from 'class-transformer';
-import { IsDefined } from 'class-validator';
-import { AccountBasicDto, SystemStatus } from '../../../libs';
-import { RoleDto } from '../../roles/dtos/role.dto';
+import {Expose, Type} from 'class-transformer';
+import {IsDefined} from 'class-validator';
+import {AccountBasicDto, SystemStatus} from '../../../libs';
+import {RoleDto} from '../../roles/dtos/role.dto';
 
 export class UserAccountDto extends AccountBasicDto {
   @Expose()

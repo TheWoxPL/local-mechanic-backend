@@ -1,4 +1,4 @@
-import { ConfigService } from '@nestjs/config';
+import {ConfigService} from '@nestjs/config';
 
 export function getMongoConnectionString(configService: ConfigService): string {
   const host = configService.get<string>('MONGODB_HOST');

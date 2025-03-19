@@ -5,7 +5,7 @@ declare module 'express-session' {
     user: {
       id: string;
       email: string;
-      permissions: { subject: string; action: string }[];
+      permissions: {subject: string; action: string}[];
     };
   }
 }

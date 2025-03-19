@@ -1,5 +1,5 @@
-import { Expose } from 'class-transformer';
-import { SystemStatus } from 'src/libs/shared/enums/system-status.enum';
+import {Expose} from 'class-transformer';
+import {SystemStatus} from 'src/libs/shared/enums/system-status.enum';
 export class ResponseTokenDTO {
   @Expose()
   username!: string;

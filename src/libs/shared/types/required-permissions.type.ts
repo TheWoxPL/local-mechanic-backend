@@ -1,3 +1,3 @@
-import { Action, Subject } from 'src/libs/shared';
+import {Action, Subject} from 'src/libs/shared';
 
-export type RequiredPermissions = { action: Action; subject: Subject };
+export type RequiredPermissions = {action: Action; subject: Subject};
