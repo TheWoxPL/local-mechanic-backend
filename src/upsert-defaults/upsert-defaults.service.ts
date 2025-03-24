@@ -18,9 +18,16 @@ export class UpsertDefaultsService implements OnModuleInit {
     private readonly userAccountModel: Model<UserAccount>,
     @InjectModel(Role.name)
     private readonly roleModel: Model<Role>
-  ) {}
+  ) {
+    Logger.debug(
+      '[UpsertDefaultsService] Constructor called--------------------------'
+    );
+  }
 
   async onModuleInit(): Promise<void> {
+    Logger.debug(
+      '[UpsertDefaultsService] OnModuleInit called----------------------------'
+    );
     await this.upsertDefaults();
     await this.upsertSystemAccount();
     await this.createRoles();
@@ -95,7 +102,6 @@ export class UpsertDefaultsService implements OnModuleInit {
       }
       this.systemAccount = systemAccount;
     }
-    Logger.debug('[UpsertService] System account exists in database');
     return this.systemAccount;
   }
 

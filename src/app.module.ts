@@ -2,13 +2,14 @@ import {Module} from '@nestjs/common';
 import {ConfigModule, ConfigService} from '@nestjs/config';
 import {MongooseModule} from '@nestjs/mongoose';
 import {getMongoConnectionString} from './libs/';
-import {UpsertDefaultsService} from './upsert-defaults/upsert-defaults.service';
+
 import {MongooseModels} from './models';
 import {AppController} from './app.controller';
 import {APP_GUARD} from '@nestjs/core';
 import {PermissionsGuard} from './libs/internal/guards/permissions.guard';
 import {AuthModule} from './auth/auth.module';
 import {CompaniesModule} from './core/companies/companies.module';
+import {UpsertDefaultsModule} from './upsert-defaults/upsert-defaults.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import {CompaniesModule} from './core/companies/companies.module';
       })
     }),
     MongooseModule.forFeature(MongooseModels),
+    UpsertDefaultsModule,
     AuthModule,
     CompaniesModule
   ],
@@ -32,9 +34,8 @@ import {CompaniesModule} from './core/companies/companies.module';
     {
       provide: APP_GUARD,
       useClass: PermissionsGuard
-    },
-    UpsertDefaultsService
+    }
   ],
-  exports: [UpsertDefaultsService]
+  exports: []
 })
 export class AppModule {}
