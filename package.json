@@ -26,7 +26,7 @@
     "prepare": "husky",
     "prepare:dev": "docker-compose -f docker/docker-compose.yml up -d",
     "generate-api-json": "curl -o local-mechanic-api.json http://$npm_package_config_host_name:$npm_package_config_host_port/api-json",
-    "firebase-emulator:start": "firebase emulators:start",
+    "firebase-emulators:start": "firebase emulators:start",
     "prepare:husky": "chmod +x .husky/pre-commit"
   },
   "dependencies": {
