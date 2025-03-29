@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Req} from '@nestjs/common';
+import {Body, Controller, Get, Param, Req} from '@nestjs/common';
 import {Post} from '@nestjs/common';
 import {Request} from 'express';
 import {CompaniesService} from '../services/companies.service';
@@ -8,7 +8,7 @@ import {CompanyDTO} from '../dtos/company.dto';
 
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly companieService: CompaniesService) {}
+  constructor(private readonly companiesService: CompaniesService) {}
 
   @Permissions(AppPermissions.APP.DISPLAY)
   @Post('add-company')
@@ -16,7 +16,7 @@ export class CompaniesController {
     @Body() createCompanyDto: CreateCompanyDTO,
     @Req() req: Request
   ): Promise<CompanyDTO> {
-    const result = await this.companieService.create(
+    const result = await this.companiesService.create(
       createCompanyDto,
       req.session.user!.email
     );
@@ -26,9 +26,16 @@ export class CompaniesController {
   @Permissions(AppPermissions.APP.DISPLAY)
   @Get('get-user-companies')
   async getCompanies(@Req() req: Request): Promise<CompanyDTO[]> {
-    const result = await this.companieService.findUserCompanies(
+    const result = await this.companiesService.findUserCompanies(
       req.session.user!.email
     );
+    return result;
+  }
+
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @Get('get-company/:uuid')
+  async getCompany(@Param('uuid') uuid: string): Promise<CompanyDTO> {
+    const result = await this.companiesService.findCompany(uuid);
     return result;
   }
 }

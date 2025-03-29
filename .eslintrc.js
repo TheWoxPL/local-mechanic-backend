@@ -28,7 +28,6 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    "space-in-brackets": ["error", "always"],
     "prettier/prettier": "error",
     "@typescript-eslint/no-unused-vars": "warn",
     "no-console": "warn",

@@ -47,4 +47,11 @@ export class CompaniesService {
       excludeExtraneousValues: true
     });
   }
+
+  async findCompany(uuid: string): Promise<CompanyDTO> {
+    const result = await this.companyModel.findOne({_id: uuid}).lean().exec();
+    return plainToClass(CompanyDTO, result, {
+      excludeExtraneousValues: true
+    });
+  }
 }
