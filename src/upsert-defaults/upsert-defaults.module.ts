@@ -11,6 +11,11 @@ import {
   Currency,
   ServiceUnit
 } from '../models';
+import { TimeUnit, TimeUnitSchema } from 'src/models/time-unit.model';
+import {
+  ServiceAvailability,
+  ServiceAvailabilitySchema
+} from 'src/models/service-availability.model';
 
 @Module({
   imports: [
@@ -18,6 +23,8 @@ import {
       { name: UserAccount.name, schema: UserAccountSchema },
       { name: Role.name, schema: RoleSchema },
       { name: Currency.name, schema: CurrencySchema },
+      { name: TimeUnit.name, schema: TimeUnitSchema },
+      { name: ServiceAvailability.name, schema: ServiceAvailabilitySchema },
       { name: ServiceUnit.name, schema: ServiceUnitSchema }
     ])
   ],

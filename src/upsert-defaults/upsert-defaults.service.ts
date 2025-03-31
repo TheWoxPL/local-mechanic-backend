@@ -2,11 +2,12 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, HydratedDocument, Model, RootFilterQuery } from 'mongoose';
 import { Types } from 'mongoose';
-import { UserAccount, Role, Currency, ServiceUnit } from '../models';
+import { UserAccount, Role, Currency, ServiceUnit, TimeUnit } from '../models';
 import { AppPermissions, RoleType } from 'src/libs';
 import { UserAccountDto } from 'src/core/accounts/dtos';
 import { plainToClass } from 'class-transformer';
 import { DefaultData } from './defaultData';
+import { ServiceAvailability } from 'src/models/service-availability.model';
 
 @Injectable()
 export class UpsertDefaultsService implements OnModuleInit {
@@ -21,7 +22,11 @@ export class UpsertDefaultsService implements OnModuleInit {
     @InjectModel(Currency.name)
     private readonly currencyModel: Model<Currency>,
     @InjectModel(ServiceUnit.name)
-    private readonly serviceUnitModel: Model<ServiceUnit>
+    private readonly serviceUnitModel: Model<ServiceUnit>,
+    @InjectModel(ServiceAvailability.name)
+    private readonly serviceAvailabilityModel: Model<ServiceAvailability>,
+    @InjectModel(TimeUnit.name)
+    private readonly timeUnitModel: Model<TimeUnit>
   ) {
     Logger.debug('[UpsertDefaultsService] Constructor called');
   }
@@ -70,6 +75,16 @@ export class UpsertDefaultsService implements OnModuleInit {
         model: this.serviceUnitModel,
         data: DefaultData.serviceUnits,
         uniqueKey: 'name' as keyof ServiceUnit
+      },
+      {
+        model: this.serviceAvailabilityModel,
+        data: DefaultData.serviceAvailabilities,
+        uniqueKey: 'name' as keyof ServiceAvailability
+      },
+      {
+        model: this.timeUnitModel,
+        data: DefaultData.timeUnits,
+        uniqueKey: 'name' as keyof TimeUnit
       }
     ];
 

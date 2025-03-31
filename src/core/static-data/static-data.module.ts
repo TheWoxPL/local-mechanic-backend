@@ -4,8 +4,12 @@ import { StaticDataService } from './services/static-data.service';
 import {
   Currency,
   CurrencySchema,
+  ServiceAvailability,
+  ServiceAvailabilitySchema,
   ServiceUnit,
-  ServiceUnitSchema
+  ServiceUnitSchema,
+  TimeUnit,
+  TimeUnitSchema
 } from 'src/models';
 import { MongooseModule } from '@nestjs/mongoose';
 
@@ -13,7 +17,9 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     MongooseModule.forFeature([
       { name: Currency.name, schema: CurrencySchema },
-      { name: ServiceUnit.name, schema: ServiceUnitSchema }
+      { name: ServiceUnit.name, schema: ServiceUnitSchema },
+      { name: ServiceAvailability.name, schema: ServiceAvailabilitySchema },
+      { name: TimeUnit.name, schema: TimeUnitSchema }
     ])
   ],
   controllers: [StaticDataController],
