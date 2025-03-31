@@ -6,14 +6,14 @@ import {
   Injectable,
   UnauthorizedException
 } from '@nestjs/common';
-import {Reflector} from '@nestjs/core';
+import { Reflector } from '@nestjs/core';
 import {
   Action,
   PERMISSION_KEY,
   RequiredPermissions,
   Subject
 } from '../../shared';
-import {AuthService} from 'src/auth/auth.service';
+import { AuthService } from 'src/auth/auth.service';
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   constructor(

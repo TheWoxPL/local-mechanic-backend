@@ -1,6 +1,6 @@
-import {Module} from '@nestjs/common';
-import {MongooseModule} from '@nestjs/mongoose';
-import {UpsertDefaultsService} from './upsert-defaults.service';
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UpsertDefaultsService } from './upsert-defaults.service';
 import {
   UserAccount,
   UserAccountSchema,
@@ -15,10 +15,10 @@ import {
 @Module({
   imports: [
     MongooseModule.forFeature([
-      {name: UserAccount.name, schema: UserAccountSchema},
-      {name: Role.name, schema: RoleSchema},
-      {name: Currency.name, schema: CurrencySchema},
-      {name: ServiceUnit.name, schema: ServiceUnitSchema}
+      { name: UserAccount.name, schema: UserAccountSchema },
+      { name: Role.name, schema: RoleSchema },
+      { name: Currency.name, schema: CurrencySchema },
+      { name: ServiceUnit.name, schema: ServiceUnitSchema }
     ])
   ],
   providers: [UpsertDefaultsService],

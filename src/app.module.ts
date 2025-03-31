@@ -1,15 +1,16 @@
-import {Module} from '@nestjs/common';
-import {ConfigModule, ConfigService} from '@nestjs/config';
-import {MongooseModule} from '@nestjs/mongoose';
-import {getMongoConnectionString} from './libs/';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { getMongoConnectionString } from './libs/';
 
-import {MongooseModels} from './models';
-import {AppController} from './app.controller';
-import {APP_GUARD} from '@nestjs/core';
-import {PermissionsGuard} from './libs/internal/guards/permissions.guard';
-import {AuthModule} from './auth/auth.module';
-import {CompaniesModule} from './core/companies/companies.module';
-import {UpsertDefaultsModule} from './upsert-defaults/upsert-defaults.module';
+import { MongooseModels } from './models';
+import { AppController } from './app.controller';
+import { APP_GUARD } from '@nestjs/core';
+import { PermissionsGuard } from './libs/internal/guards/permissions.guard';
+import { AuthModule } from './auth/auth.module';
+import { CompaniesModule } from './core/companies/companies.module';
+import { UpsertDefaultsModule } from './upsert-defaults/upsert-defaults.module';
+import { StaticDataModule } from './core/static-data/static-data.module';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import {UpsertDefaultsModule} from './upsert-defaults/upsert-defaults.module';
     MongooseModule.forFeature(MongooseModels),
     UpsertDefaultsModule,
     AuthModule,
-    CompaniesModule
+    CompaniesModule,
+    StaticDataModule
   ],
   controllers: [AppController],
   providers: [

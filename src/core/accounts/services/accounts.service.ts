@@ -1,11 +1,11 @@
-import {ConflictException, Injectable} from '@nestjs/common';
-import {InjectModel} from '@nestjs/mongoose';
-import {plainToClass} from 'class-transformer';
-import {Model} from 'mongoose';
-import {UserAccount} from 'src/models';
-import {UpsertDefaultsService} from 'src/upsert-defaults/upsert-defaults.service';
-import {CreateUserAccountDto, UserAccountDto} from '../dtos';
-import {RoleType} from 'src/libs';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { plainToClass } from 'class-transformer';
+import { Model } from 'mongoose';
+import { UserAccount } from 'src/models';
+import { UpsertDefaultsService } from 'src/upsert-defaults/upsert-defaults.service';
+import { CreateUserAccountDto, UserAccountDto } from '../dtos';
+import { RoleType } from 'src/libs';
 
 @Injectable()
 export class AccountsService {
@@ -53,7 +53,7 @@ export class AccountsService {
 
   async findByEmail(email: string): Promise<UserAccountDto> {
     const userAccount = await this.userAccountModel
-      .findOne({email})
+      .findOne({ email })
       .populate('createdBy updatedBy role')
       .lean()
       .exec();
@@ -73,7 +73,7 @@ export class AccountsService {
       throw new ConflictException('Role not found.');
     }
 
-    const userAccount = await this.userAccountModel.findOne({email}).exec();
+    const userAccount = await this.userAccountModel.findOne({ email }).exec();
     if (!userAccount!.role.includes(role.id)) {
       userAccount!.role.push(role.id);
       await userAccount!.save();
@@ -84,7 +84,7 @@ export class AccountsService {
 
   async hasAnyRoleByEmail(email: string): Promise<boolean> {
     const userAccount = await this.userAccountModel
-      .findOne({email})
+      .findOne({ email })
       .lean()
       .exec();
     if (userAccount!.role.length > 0) {

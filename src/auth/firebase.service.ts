@@ -1,4 +1,4 @@
-import {Injectable, InternalServerErrorException} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
 @Injectable()

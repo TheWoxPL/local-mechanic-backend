@@ -1,6 +1,6 @@
-import {Prop} from '@nestjs/mongoose';
+import { Prop } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import {BasicClass} from './basic.model';
+import { BasicClass } from './basic.model';
 
 export abstract class BaseClass extends BasicClass {
   @Prop({

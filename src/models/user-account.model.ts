@@ -1,7 +1,7 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import {FieldConstraints} from '../libs';
-import {BaseClass} from './base.model';
+import { FieldConstraints } from '../libs';
+import { BaseClass } from './base.model';
 
 @Schema()
 export class UserAccount extends BaseClass {
@@ -26,10 +26,10 @@ export class UserAccount extends BaseClass {
   })
   lastName?: string;
 
-  @Prop({required: false})
+  @Prop({ required: false })
   avatarUrl?: string;
 
-  @Prop({required: true, unique: true})
+  @Prop({ required: true, unique: true })
   email!: string;
 
   @Prop({

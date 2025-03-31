@@ -1,9 +1,9 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document} from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 
 @Schema()
 export class Currency extends Document {
-  @Prop({required: true, unique: true})
+  @Prop({ required: true, unique: true })
   name!: string;
 }
 

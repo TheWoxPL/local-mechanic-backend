@@ -7,9 +7,9 @@ import {
   UnauthorizedException,
   Req
 } from '@nestjs/common';
-import {AuthService} from './auth.service';
-import {Request} from 'express';
-import {ResponseTokenDTO} from './dtos';
+import { AuthService } from './auth.service';
+import { Request } from 'express';
+import { ResponseTokenDTO } from './dtos';
 
 @Controller('auth')
 export class AuthController {

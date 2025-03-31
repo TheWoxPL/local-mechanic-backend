@@ -18,7 +18,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:n/recommended',
     'eslint:recommended',
-    'plugin:prettier/recommended',
     'prettier'
   ],
   root: true,
@@ -28,10 +27,16 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
-    "prettier/prettier": "error",
-    "@typescript-eslint/no-unused-vars": "warn",
-    "no-console": "warn",
-    'prettier/prettier': ['error', { trailingComma: 'none' }],
+    'prettier/prettier': 'error',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    'no-console': 'warn',
+    'prettier/prettier': [
+      'error',
+      {
+        trailingComma: 'none',
+        bracketSpacing: true // Ensure spacing around braces
+      }
+    ],
     'comma-dangle': ['error', 'never'],
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],

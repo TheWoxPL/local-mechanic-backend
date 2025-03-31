@@ -1,5 +1,5 @@
-import {CustomDecorator, SetMetadata} from '@nestjs/common';
-import {RequiredPermissions} from 'src/libs';
+import { CustomDecorator, SetMetadata } from '@nestjs/common';
+import { RequiredPermissions } from 'src/libs';
 
 export const PERMISSION_KEY = 'Permissions';
 export const Permissions = (

@@ -1,5 +1,5 @@
-import {SwaggerModule, DocumentBuilder} from '@nestjs/swagger';
-import {INestApplication, Logger} from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { INestApplication, Logger } from '@nestjs/common';
 
 export function SwaggerSetup(app: INestApplication): void {
   const config = new DocumentBuilder()
