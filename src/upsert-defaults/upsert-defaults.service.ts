@@ -1,11 +1,12 @@
 import {Injectable, Logger, OnModuleInit} from '@nestjs/common';
 import {InjectConnection, InjectModel} from '@nestjs/mongoose';
-import {plainToClass} from 'class-transformer';
-import {Connection, HydratedDocument, Model} from 'mongoose';
-import {UserAccountDto} from '../core/accounts/dtos';
-import {MongooseModels, UserAccount, Role} from '../models';
+import {Connection, HydratedDocument, Model, RootFilterQuery} from 'mongoose';
 import {Types} from 'mongoose';
+import {UserAccount, Role, Currency, ServiceUnit} from '../models';
 import {AppPermissions, RoleType} from 'src/libs';
+import {UserAccountDto} from 'src/core/accounts/dtos';
+import {plainToClass} from 'class-transformer';
+import {DefaultData} from './defaultData';
 
 @Injectable()
 export class UpsertDefaultsService implements OnModuleInit {
@@ -16,69 +17,95 @@ export class UpsertDefaultsService implements OnModuleInit {
     @InjectConnection() private readonly connection: Connection,
     @InjectModel(UserAccount.name)
     private readonly userAccountModel: Model<UserAccount>,
-    @InjectModel(Role.name)
-    private readonly roleModel: Model<Role>
+    @InjectModel(Role.name) private readonly roleModel: Model<Role>,
+    @InjectModel(Currency.name) private readonly currencyModel: Model<Currency>,
+    @InjectModel(ServiceUnit.name)
+    private readonly serviceUnitModel: Model<ServiceUnit>
   ) {
-    Logger.debug(
-      '[UpsertDefaultsService] Constructor called--------------------------'
-    );
+    Logger.debug('[UpsertDefaultsService] Constructor called');
   }
 
   async onModuleInit(): Promise<void> {
-    Logger.debug(
-      '[UpsertDefaultsService] OnModuleInit called----------------------------'
-    );
-    await this.upsertDefaults();
+    Logger.debug('[UpsertDefaultsService] OnModuleInit called');
+    await this.upsertDefaultModels();
     await this.upsertSystemAccount();
     await this.createRoles();
     await this.upsertAdminAccount();
+    await this.upsertDefaultData();
   }
 
-  private getCollectionNames(models: typeof MongooseModels): string[] {
-    const allNames = models.map((model) => model.collection);
-    return allNames.filter((name) => name !== undefined);
-  }
+  private async upsertDocuments<T>(
+    model: Model<T>,
+    documents: Partial<T>[],
+    uniqueKey: keyof T
+  ): Promise<void> {
+    for (const document of documents) {
+      const query: RootFilterQuery<T> = {
+        [uniqueKey]: document[uniqueKey]
+      } as RootFilterQuery<T>;
+      const existingDocument = await model.findOne(query).exec();
 
-  private async upsertDefaults(): Promise<void> {
-    try {
-      const dbName = process.env.MONGODB_DATABASE;
-      if (dbName === undefined) {
-        throw new Error(
-          'There is no database name in the environment variables'
+      if (!existingDocument) {
+        await model.create(document);
+        Logger.debug(
+          `[UpsertService] Document added: ${JSON.stringify(document)}`
+        );
+      } else {
+        Logger.debug(
+          `[UpsertService] Document already exists: ${JSON.stringify(document)}`
         );
       }
-      let collectionAdded = false;
-      const db = this.connection.useDb(dbName, {useCache: true});
-      if (db.db === undefined) {
+    }
+  }
+
+  private async upsertDefaultData(): Promise<void> {
+    const collections = [
+      {
+        model: this.currencyModel,
+        data: DefaultData.currencies,
+        uniqueKey: 'name' as keyof Currency
+      },
+      {
+        model: this.serviceUnitModel,
+        data: DefaultData.serviceUnits,
+        uniqueKey: 'name' as keyof ServiceUnit
+      }
+    ];
+
+    for (const {model, data, uniqueKey} of collections) {
+      await this.upsertDocuments(model, data, uniqueKey);
+    }
+  }
+
+  private async upsertDefaultModels(): Promise<void> {
+    try {
+      const dbName = process.env.MONGODB_DATABASE;
+      if (!dbName) {
         throw new Error(
-          'There is no database connection. Check the connection string.'
+          'Database name is not defined in environment variables'
         );
+      }
+
+      const db = this.connection.useDb(dbName, {useCache: true});
+      if (!db.db) {
+        throw new Error('Database connection is not established');
       }
 
       const collections = await db.db.listCollections().toArray();
-      const collectionNames = this.getCollectionNames(MongooseModels);
+      const collectionNames = Object.keys(DefaultData);
 
       for (const collectionName of collectionNames) {
         if (
           !collections.some((collection) => collection.name === collectionName)
         ) {
           await db.createCollection(collectionName);
-          collectionAdded = true;
+          Logger.debug(`[UpsertService] Collection ${collectionName} created.`);
         }
       }
-      if (collectionAdded) {
-        Logger.debug('[UpsertService] Database prepared.');
-      }
     } catch (error) {
-      Logger.debug(error);
+      Logger.error(`[UpsertService] Error during upsertDefaults: ${error}`);
+      throw error;
     }
-  }
-
-  async getSystemAccount(): Promise<UserAccountDto> {
-    const systemAccount = await this.upsertSystemAccount();
-    return plainToClass(UserAccountDto, systemAccount, {
-      excludeExtraneousValues: true
-    });
   }
 
   private async upsertSystemAccount(): Promise<HydratedDocument<UserAccount>> {
@@ -139,6 +166,13 @@ export class UpsertDefaultsService implements OnModuleInit {
     await this.createRoleIfNotExists(RoleType.ADMIN, [AppPermissions.ADMIN]);
   }
 
+  async getSystemAccount(): Promise<UserAccountDto> {
+    const systemAccount = await this.upsertSystemAccount();
+    return plainToClass(UserAccountDto, systemAccount, {
+      excludeExtraneousValues: true
+    });
+  }
+
   private async createRoleIfNotExists(
     name: string,
     permissions: {action: string; subject: string}[]
@@ -158,12 +192,15 @@ export class UpsertDefaultsService implements OnModuleInit {
       Logger.debug(`[UpsertService] Role ${name} already exists.`);
     }
   }
+
   async getCustomerRole(): Promise<HydratedDocument<Role> | null> {
     return this.roleModel.findOne({name: RoleType.CUSTOMER}).exec();
   }
+
   async getEntrepreneurRole(): Promise<HydratedDocument<Role> | null> {
     return this.roleModel.findOne({name: RoleType.ENTREPRENEUR}).exec();
   }
+
   async getAdminRole(): Promise<HydratedDocument<Role> | null> {
     return this.roleModel.findOne({name: RoleType.ADMIN}).exec();
   }
