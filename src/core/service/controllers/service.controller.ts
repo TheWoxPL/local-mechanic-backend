@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { ServiceService } from '../services/service.service';
 import { AppPermissions, Permissions } from '../../../libs';
 import { Request } from 'express';
@@ -20,6 +20,14 @@ export class ServiceController {
       createServiceDTO,
       req.session.user!.id
     );
+    return result;
+  }
+
+  @Get('get-services/:companyId')
+  async getAllServicesByCompanyId(
+    @Param('companyId') companyId: string
+  ): Promise<ServiceDTO[]> {
+    const result = await this.serviceService.findServicesByCompanyId(companyId);
     return result;
   }
 }

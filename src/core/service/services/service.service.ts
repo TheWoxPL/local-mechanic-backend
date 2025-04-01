@@ -14,6 +14,7 @@ export class ServiceService {
     private serviceModel: Model<Service>,
     private companiesService: CompaniesService
   ) {}
+
   async createService(
     createServiceDTO: CreateServiceDTO,
     userId: string
@@ -40,5 +41,15 @@ export class ServiceService {
     return plainToClass(ServiceDTO, result, {
       excludeExtraneousValues: true
     });
+  }
+
+  async findServicesByCompanyId(companyId: string): Promise<ServiceDTO[]> {
+    const result = await this.serviceModel.find({ company: companyId }).exec();
+    const services: ServiceDTO[] = result.map((service) =>
+      plainToClass(ServiceDTO, service, {
+        excludeExtraneousValues: true
+      })
+    );
+    return services;
   }
 }
