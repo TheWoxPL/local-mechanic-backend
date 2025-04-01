@@ -26,6 +26,7 @@ export class CompaniesService {
     createCompanyDoc.companyName = createCompanyDto.companyName;
     createCompanyDoc.description = createCompanyDto.description;
     createCompanyDoc.foundDate = createCompanyDto.foundDate;
+    createCompanyDoc.owner = currentUser.id;
     createCompanyDoc.owners = createCompanyDto.owners;
     createCompanyDoc.verifiedOwners = createCompanyDto.verifiedOwners;
     createCompanyDoc.createdBy = currentUser.id;
@@ -49,7 +50,11 @@ export class CompaniesService {
   }
 
   async findCompany(uuid: string): Promise<CompanyDTO> {
-    const result = await this.companyModel.findOne({ _id: uuid }).lean().exec();
+    const result = await this.companyModel
+      .findOne({ _id: uuid })
+      // .populate('owner')
+      .lean()
+      .exec();
     return plainToClass(CompanyDTO, result, {
       excludeExtraneousValues: true
     });

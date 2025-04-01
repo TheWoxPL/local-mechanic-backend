@@ -10,11 +10,13 @@ import {
 import { AuthService } from './auth.service';
 import { Request } from 'express';
 import { ResponseTokenDTO } from './dtos';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiBearerAuth()
   @Post('verify-token')
   @HttpCode(HttpStatus.OK)
   async verifyToken(

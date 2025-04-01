@@ -9,6 +9,7 @@ import {
   ServiceAvailabilitySchema
 } from './service-availability.model';
 import { TimeUnit, TimeUnitSchema } from './time-unit.model';
+import { Service, ServiceSchema } from './service.model';
 
 export * from './role.model';
 export * from './user-account.model';
@@ -53,5 +54,10 @@ export const MongooseModels: ModelDefinition[] = [
     name: TimeUnit.name,
     schema: TimeUnitSchema,
     collection: 'timeUnits'
+  },
+  {
+    name: Service.name,
+    schema: ServiceSchema,
+    collection: 'services'
   }
 ];

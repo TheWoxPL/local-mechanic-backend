@@ -1,5 +1,6 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { BaseDto } from '../../../libs';
+import { UserAccountDto } from 'src/core/accounts/dtos';
 
 export class CompanyDTO extends BaseDto {
   @Expose()
@@ -8,6 +9,9 @@ export class CompanyDTO extends BaseDto {
   description?: string;
   @Expose()
   foundDate!: Date;
+  @Expose()
+  @Type(() => UserAccountDto)
+  owner!: UserAccountDto;
   @Expose()
   owners?: string;
   @Expose()

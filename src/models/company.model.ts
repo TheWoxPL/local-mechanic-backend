@@ -17,12 +17,19 @@ export class Company extends BaseClass {
   owners?: string;
 
   @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserAccount'
+  })
+  owner!: string;
+
+  @Prop({
     required: false,
     default: [],
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'UserAccount'
   })
-  verifiedOwners!: string[];
+  verifiedOwners?: string[];
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

@@ -14,6 +14,6 @@ import { UpsertDefaultsModule } from 'src/upsert-defaults/upsert-defaults.module
   ],
   controllers: [CompaniesController],
   providers: [CompaniesService],
-  exports: []
+  exports: [CompaniesService]
 })
 export class CompaniesModule {}
