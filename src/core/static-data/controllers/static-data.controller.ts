@@ -23,7 +23,7 @@ export class StaticDataController {
     const result = await this.staticDataService.findAllServiceAvailabilities();
     return result;
   }
-  @Get('get-stime-units')
+  @Get('get-time-units')
   async getTimeUnits(): Promise<TimeUnitDTO[]> {
     const result = await this.staticDataService.findAllTimeUnits();
     return result;
