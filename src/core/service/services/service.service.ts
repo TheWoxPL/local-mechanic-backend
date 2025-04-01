@@ -44,7 +44,17 @@ export class ServiceService {
   }
 
   async findServicesByCompanyId(companyId: string): Promise<ServiceDTO[]> {
-    const result = await this.serviceModel.find({ company: companyId }).exec();
+    const result = await this.serviceModel
+      .find({ company: companyId })
+      .populate([
+        'currency',
+        'timeUnit',
+        'serviceUnit',
+        'serviceAvailability',
+        'company'
+      ])
+      .lean()
+      .exec();
     const services: ServiceDTO[] = result.map((service) =>
       plainToClass(ServiceDTO, service, {
         excludeExtraneousValues: true

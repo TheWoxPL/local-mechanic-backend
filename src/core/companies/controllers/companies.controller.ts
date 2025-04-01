@@ -32,7 +32,6 @@ export class CompaniesController {
     return result;
   }
 
-  @Permissions(AppPermissions.APP.DISPLAY)
   @Get('get-company/:uuid')
   async getCompany(@Param('uuid') uuid: string): Promise<CompanyDTO> {
     const result = await this.companiesService.findCompany(uuid);

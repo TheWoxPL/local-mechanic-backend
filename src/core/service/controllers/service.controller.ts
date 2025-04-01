@@ -5,7 +5,7 @@ import { Request } from 'express';
 import { ServiceDTO, CreateServiceDTO } from '../dto/';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-@Controller('service')
+@Controller('services')
 export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}
 
