@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateServiceDTO, ServiceDTO } from '../dto';
 import { CompaniesService } from 'src/core/companies/services/companies.service';
 import { CompanyDTO } from 'src/core/companies/dtos/company.dto';
@@ -61,5 +61,33 @@ export class ServiceService {
       })
     );
     return services;
+  }
+
+  async findServiceById(serviceId: string): Promise<ServiceDTO> {
+    const result = await this.serviceModel
+      .findById(serviceId)
+      .populate([
+        'currency',
+        'timeUnit',
+        'serviceUnit',
+        'serviceAvailability',
+        'company'
+      ])
+      .lean()
+      .exec();
+    return plainToClass(ServiceDTO, result, {
+      excludeExtraneousValues: true
+    });
+  }
+
+  async removeServiceById(serviceId: string, userId: string): Promise<void> {
+    const givenService: ServiceDTO = await this.findServiceById(serviceId);
+    const givenCompany: CompanyDTO = await this.companiesService.findCompany(
+      givenService.company.id
+    );
+    if (givenCompany.owner.id !== userId) {
+      throw new ForbiddenException();
+    }
+    await this.serviceModel.findByIdAndDelete(serviceId).exec();
   }
 }

@@ -1,7 +1,17 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  Param,
+  Post,
+  Req,
+  Res
+} from '@nestjs/common';
 import { ServiceService } from '../services/service.service';
 import { AppPermissions, Permissions } from '../../../libs';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { ServiceDTO, CreateServiceDTO } from '../dto/';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
@@ -29,5 +39,29 @@ export class ServiceController {
   ): Promise<ServiceDTO[]> {
     const result = await this.serviceService.findServicesByCompanyId(companyId);
     return result;
+  }
+
+  @ApiBearerAuth()
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @Delete(':serviceId')
+  async removeService(
+    @Param('serviceId') serviceId: string,
+    @Req() req: Request,
+    @Res() res: Response
+  ): Promise<Response> {
+    try {
+      await this.serviceService.removeServiceById(
+        serviceId,
+        req.session.user!.id
+      );
+      return res.status(200).json({ message: 'Service successfully removed' });
+    } catch (error) {
+      if (error instanceof ForbiddenException) {
+        return res
+          .status(403)
+          .json({ message: 'You are not allowed to remove this service' });
+      }
+      return res.status(500).json({ message: 'An unexpected error occurred' });
+    }
   }
 }
