@@ -90,4 +90,28 @@ export class ServiceService {
     }
     await this.serviceModel.findByIdAndDelete(serviceId).exec();
   }
+
+  async generateServicesForUser(): Promise<ServiceDTO[]> {
+    const result = await this.serviceModel
+      .find({})
+      .limit(50)
+      .populate([
+        'currency',
+        'timeUnit',
+        'serviceUnit',
+        'serviceAvailability',
+        'company'
+      ])
+      .lean()
+      .exec();
+
+    const shuffled = result.sort(() => Math.random() - 0.5);
+    const services: ServiceDTO[] = shuffled.map((service) =>
+      plainToClass(ServiceDTO, service, {
+        excludeExtraneousValues: true
+      })
+    );
+
+    return services;
+  }
 }

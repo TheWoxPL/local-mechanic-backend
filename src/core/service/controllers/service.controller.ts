@@ -64,4 +64,10 @@ export class ServiceController {
       return res.status(500).json({ message: 'An unexpected error occurred' });
     }
   }
+
+  @Get('generate-services-for-user')
+  async generateServicesForUser(): Promise<ServiceDTO[]> {
+    const result = await this.serviceService.generateServicesForUser();
+    return result;
+  }
 }
