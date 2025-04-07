@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 export function getMongoConnectionString(configService: ConfigService): string {
@@ -12,15 +13,17 @@ export function getMongoConnectionString(configService: ConfigService): string {
   const user = configService.get<string>('MONGODB_USER');
   const password = configService.get<string>('MONGODB_PASSWORD');
 
-  const isSrv = configService.get<boolean>('MONGODB_SRV');
+  const isSrv = configService.get<string>('MONGODB_SRV') === 'true';
 
-  if (isSrv) {
+  if (isSrv === true) {
+    Logger.debug('Using SRV connection string');
     return user && password
       ? `mongodb+srv://${user}:${password}@${host}/${database}?retryWrites=true&w=majority&appName=local-mechanic-service`
       : `mongodb+srv://${host}/${database}?retryWrites=true&w=majority&appName=local-mechanic-service`;
+  } else {
+    Logger.debug('Using standard connection string');
+    return userDev && passwordDev
+      ? `mongodb://${userDev}:${passwordDev}@${hostDev}:${portDev}/${databaseDev}?authSource=admin`
+      : `mongodb://${hostDev}:${portDev}/${databaseDev}`;
   }
-
-  return user && password
-    ? `mongodb://${userDev}:${passwordDev}@${hostDev}:${portDev}/${databaseDev}?authSource=admin`
-    : `mongodb://${hostDev}:${portDev}/${databaseDev}`;
 }
