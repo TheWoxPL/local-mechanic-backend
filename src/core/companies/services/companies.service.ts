@@ -29,6 +29,7 @@ export class CompaniesService {
     createCompanyDoc.owner = currentUser.id;
     createCompanyDoc.owners = createCompanyDto.owners;
     createCompanyDoc.verifiedOwners = createCompanyDto.verifiedOwners;
+    createCompanyDoc.workingHours = createCompanyDto.workingHours;
     createCompanyDoc.createdBy = currentUser.id;
     createCompanyDoc.updatedBy = currentUser.id;
 
@@ -41,9 +42,18 @@ export class CompaniesService {
 
   async findUserCompanies(userEmail: string): Promise<CompanyDTO[]> {
     const currentUser = await this.accountsService.findByEmail(userEmail);
-    const result = await this.companyModel.find({
-      $or: [{ createdBy: currentUser.id }, { verifiedOwners: currentUser.id }]
-    });
+    const result = await this.companyModel
+      .find({
+        $or: [{ createdBy: currentUser.id }, { verifiedOwners: currentUser.id }]
+      })
+      .select({
+        'workingHours._id': 0
+      })
+      .populate({
+        path: 'workingHours'
+      })
+      .lean()
+      .exec();
     return plainToClass(CompanyDTO, result, {
       excludeExtraneousValues: true
     });
@@ -52,7 +62,12 @@ export class CompaniesService {
   async findCompany(uuid: string): Promise<CompanyDTO> {
     const result = await this.companyModel
       .findOne({ _id: uuid })
-      // .populate('owner')
+      .populate({
+        path: 'workingHours'
+      })
+      .select({
+        'workingHours._id': 0
+      })
       .lean()
       .exec();
     return plainToClass(CompanyDTO, result, {

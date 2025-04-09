@@ -12,4 +12,9 @@ export class CreateCompanyDTO extends BaseDto {
   owners?: string;
   @Expose()
   verifiedOwners!: string[];
+  @Expose()
+  workingHours!: {
+    from: number;
+    to: number;
+  };
 }

@@ -30,6 +30,15 @@ export class Company extends BaseClass {
     ref: 'UserAccount'
   })
   verifiedOwners?: string[];
+
+  @Prop({
+    required: false,
+    type: {
+      from: Number,
+      to: Number
+    }
+  })
+  workingHours?: { from: number; to: number };
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);
