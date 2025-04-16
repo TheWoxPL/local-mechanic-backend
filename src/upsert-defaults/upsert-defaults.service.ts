@@ -95,7 +95,10 @@ export class UpsertDefaultsService implements OnModuleInit {
 
   private async upsertDefaultModels(): Promise<void> {
     try {
-      const dbName = process.env.MONGODB_DATABASE;
+      const dbName =
+        process.env.NODE_ENV === 'development'
+          ? process.env.MONGODB_DATABASE_DEV
+          : process.env.MONGODB_DATABASE;
       if (!dbName) {
         throw new Error(
           'Database name is not defined in environment variables'
