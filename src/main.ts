@@ -21,7 +21,8 @@ async function bootstrap(): Promise<void> {
   if (process.env.NODE_ENV === 'development') {
     SwaggerSetup(app);
   }
-  await app.listen(3000);
+  const port = process.env.HOST_PORT || '3000';
+  await app.listen(port);
 
   const logger = new Logger('Bootstrap');
   logger.log(
