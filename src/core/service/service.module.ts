@@ -11,6 +11,7 @@ import { Service, ServiceSchema } from 'src/models/service.model';
     CompaniesModule
   ],
   controllers: [ServiceController],
-  providers: [ServiceService]
+  providers: [ServiceService],
+  exports: [ServiceService]
 })
 export class ServiceModule {}

@@ -10,6 +10,7 @@ import {
 } from './service-availability.model';
 import { TimeUnit, TimeUnitSchema } from './time-unit.model';
 import { Service, ServiceSchema } from './service.model';
+import { Order, OrderSchema } from './order.model';
 
 export * from './role.model';
 export * from './user-account.model';
@@ -18,6 +19,7 @@ export * from './currency.model';
 export * from './service-unit.model';
 export * from './service-availability.model';
 export * from './time-unit.model';
+export * from './order.model';
 
 export const MongooseModels: ModelDefinition[] = [
   {
@@ -59,5 +61,10 @@ export const MongooseModels: ModelDefinition[] = [
     name: Service.name,
     schema: ServiceSchema,
     collection: 'services'
+  },
+  {
+    name: Order.name,
+    schema: OrderSchema,
+    collection: 'orders'
   }
 ];

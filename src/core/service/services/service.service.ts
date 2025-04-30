@@ -80,6 +80,13 @@ export class ServiceService {
     });
   }
 
+  async doesServiceExistById(serviceId: string): Promise<boolean> {
+    const count = await this.serviceModel
+      .countDocuments({ _id: serviceId })
+      .exec();
+    return count > 0;
+  }
+
   async removeServiceById(serviceId: string, userId: string): Promise<void> {
     const givenService: ServiceDTO = await this.findServiceById(serviceId);
     const givenCompany: CompanyDTO = await this.companiesService.findCompany(

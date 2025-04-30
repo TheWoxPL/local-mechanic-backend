@@ -2,9 +2,10 @@ export const corsConfig = {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/no-explicit-any
   origin: (origin: any, callback: any) => {
     const allowedOrigins = [
-      process.env.CORS_ORIGIN_DEV,
-      process.env.CORS_ORIGIN_PROD
+      ...process.env.CORS_ORIGIN_DEV!.split(','),
+      ...process.env.CORS_ORIGIN_PROD!.split(',')
     ];
+
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {

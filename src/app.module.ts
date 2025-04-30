@@ -12,6 +12,7 @@ import { CompaniesModule } from './core/companies/companies.module';
 import { UpsertDefaultsModule } from './upsert-defaults/upsert-defaults.module';
 import { StaticDataModule } from './core/static-data/static-data.module';
 import { ServiceModule } from './core/service/service.module';
+import { OrdersModule } from './core/orders/orders.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { ServiceModule } from './core/service/service.module';
     AuthModule,
     CompaniesModule,
     StaticDataModule,
-    ServiceModule
+    ServiceModule,
+    OrdersModule
   ],
   controllers: [AppController],
   providers: [
