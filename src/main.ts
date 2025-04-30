@@ -23,7 +23,6 @@ async function bootstrap(): Promise<void> {
   }
   const port = process.env.HOST_PORT || '3000';
   await app.listen(port);
-
   const logger = new Logger('Bootstrap');
   logger.log(
     `Server running on: http://${process.env.HOST_NAME}:${process.env.HOST_PORT}`

@@ -1,1 +1,7 @@
-npx --no-install commitlint --edit
+if npx --no-install commitlint --edit; then
+  npx lint-staged
+  npm run build
+else
+  echo "Commit message validation failed. Skipping build."
+  exit 1
+fi
