@@ -10,18 +10,12 @@ import {
 import { AppPermissions, Permissions } from '../../../libs';
 import { CreateOrderDto } from '../dtos/create-order.dto';
 import { Order } from '../../../models/order.model';
+import { OrderDto } from '../dtos/order.dto';
 
 @ApiTags('orders')
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
-
-  @ApiBearerAuth()
-  // @Permissions(AppPermissions.APP.DISPLAY)
-  @Get('test')
-  async test(): Promise<string> {
-    return this.ordersService.test();
-  }
 
   @Permissions(AppPermissions.APP.DISPLAY)
   @ApiBearerAuth()
@@ -36,7 +30,21 @@ export class OrdersController {
   async createOrder(
     @Body() createOrderDto: CreateOrderDto,
     @Req() req: Request
-  ): Promise<Order> {
-    return this.ordersService.addOrder(createOrderDto, req.session.user!.id);
+  ): Promise<OrderDto> {
+    const userId = req.session.user!.id;
+    return this.ordersService.addOrder(createOrderDto, userId);
+  }
+
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @ApiBearerAuth()
+  @Get('get-user-orders')
+  @ApiOperation({ summary: 'Get all orders for a user' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of orders for the specified user',
+    type: [Order]
+  })
+  async getOrdersByUserId(@Req() req: Request): Promise<OrderDto[]> {
+    return this.ordersService.getOrdersByUserId(req.session.user!.id);
   }
 }

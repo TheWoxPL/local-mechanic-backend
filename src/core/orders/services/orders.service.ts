@@ -4,6 +4,8 @@ import { Model } from 'mongoose';
 import { Order } from '../../../models/order.model';
 import { CreateOrderDto } from '../dtos/create-order.dto';
 import { ServiceService } from 'src/core/service/services/service.service';
+import { plainToInstance } from 'class-transformer';
+import { OrderDto } from '../dtos/order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -20,7 +22,6 @@ export class OrdersService {
     serviceId: string,
     scheduledDate: Date
   ): Promise<boolean> {
-    // Fetch the service to get its booking time
     const service = await this.serviceService.findServiceById(serviceId);
     if (!service) {
       throw new Error(`Service with id ${serviceId} does not exist`);
@@ -50,14 +51,10 @@ export class OrdersService {
   async addOrder(
     createOrderDto: CreateOrderDto,
     userId: string
-  ): Promise<Order> {
-    console.log('createOrderDto', createOrderDto);
-    console.log('userId', userId);
-
+  ): Promise<OrderDto> {
     const serviceExists = await this.serviceService.doesServiceExistById(
       createOrderDto.serviceId
     );
-
     if (!serviceExists) {
       throw new Error(
         `Service with id ${createOrderDto.serviceId} does not exist`
@@ -68,7 +65,6 @@ export class OrdersService {
       createOrderDto.serviceId,
       createOrderDto.scheduledDate
     );
-
     if (!isAvailable) {
       throw new BadRequestException(
         'This time slot is already booked. Please select a different time.'
@@ -82,6 +78,30 @@ export class OrdersService {
       userId: userId
     });
 
-    return order.save();
+    const savedOrder = await order.save();
+    const populatedOrder = await this.orderModel
+      .findById(savedOrder._id)
+      .populate('serviceId')
+      .lean();
+
+    return plainToInstance(OrderDto, populatedOrder, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true
+    });
+  }
+
+  async getOrdersByUserId(userId: string): Promise<OrderDto[]> {
+    const orders = await this.orderModel
+      .find({ userId })
+      .populate('serviceId')
+      .sort({ scheduledDate: -1 })
+      .lean()
+      .exec();
+
+    const orderDtos = plainToInstance(OrderDto, orders, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true
+    });
+    return orderDtos;
   }
 }
