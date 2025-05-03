@@ -80,4 +80,28 @@ export class FavoriteController {
       return res.status(500).json({ message: 'Internal server error' });
     }
   }
+  @ApiBearerAuth()
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @Post('is-service-favorite')
+  @ApiOperation({ summary: 'Check if service is favorite' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns true if service is favorite, false otherwise',
+    type: Boolean
+  })
+  async isServiceFavorite(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body('serviceId') serviceId: string
+  ): Promise<Response> {
+    try {
+      const isFavorite = await this.favoriteService.isServiceFavoriteByUserId(
+        serviceId,
+        req.session.user!.id
+      );
+      return res.status(200).json({ isFavorite });
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
 }

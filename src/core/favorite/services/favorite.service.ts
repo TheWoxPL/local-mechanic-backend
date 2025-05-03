@@ -60,4 +60,16 @@ export class FavoriteService {
       serviceId: new mongoose.Types.ObjectId(serviceId)
     });
   }
+
+  async isServiceFavoriteByUserId(
+    serviceId: string,
+    userId: string
+  ): Promise<boolean> {
+    const existingFavorite = await this.favoriteModel.findOne({
+      userId: new mongoose.Types.ObjectId(userId),
+      serviceId: new mongoose.Types.ObjectId(serviceId)
+    });
+
+    return !!existingFavorite;
+  }
 }
