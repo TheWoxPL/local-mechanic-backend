@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import mongoose, { Model } from 'mongoose';
 import { Favorite } from 'src/models';
 import { FavoriteDTO } from '../dtos/favorite.dto';
@@ -34,5 +34,15 @@ export class FavoriteService {
     return plainToClass(FavoriteDTO, result, {
       excludeExtraneousValues: true
     });
+  }
+  async findFavoritesByUserId(userId: string): Promise<FavoriteDTO[]> {
+    const result = await this.favoriteModel.find({ userId });
+
+    const favoriteDtos = plainToInstance(FavoriteDTO, result, {
+      excludeExtraneousValues: true,
+      enableImplicitConversion: true
+    });
+
+    return favoriteDtos;
   }
 }

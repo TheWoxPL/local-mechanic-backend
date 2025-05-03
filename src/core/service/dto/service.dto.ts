@@ -40,4 +40,7 @@ export class ServiceDTO extends BaseDto {
   @Expose()
   @Type(() => CompanyDTO)
   company!: CompanyDTO;
+
+  @Expose()
+  isFavorite!: boolean;
 }

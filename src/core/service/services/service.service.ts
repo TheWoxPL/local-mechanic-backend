@@ -6,13 +6,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Service } from 'src/models/service.model';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
+import { FavoriteService } from 'src/core/favorite/services/favorite.service';
 
 @Injectable()
 export class ServiceService {
   constructor(
     @InjectModel(Service.name)
     private serviceModel: Model<Service>,
-    private companiesService: CompaniesService
+    private companiesService: CompaniesService,
+    private favoriteService: FavoriteService
   ) {}
 
   async createService(
@@ -120,5 +122,30 @@ export class ServiceService {
     );
 
     return services;
+  }
+
+  async getFavoriteServicesForUser(userId: string): Promise<ServiceDTO[]> {
+    const favorites = await this.favoriteService.findFavoritesByUserId(userId);
+    const serviceIds = favorites.map((fav) => fav.serviceId);
+
+    const result = await this.serviceModel
+      .find({ _id: { $in: serviceIds } })
+      .populate([
+        'currency',
+        'timeUnit',
+        'serviceUnit',
+        'serviceAvailability',
+        'company'
+      ])
+      .lean()
+      .exec();
+
+    return result.map((service) =>
+      plainToClass(
+        ServiceDTO,
+        { ...service, isFavorite: true },
+        { excludeExtraneousValues: true }
+      )
+    );
   }
 }

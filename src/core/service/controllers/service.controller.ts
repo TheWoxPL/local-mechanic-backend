@@ -84,4 +84,14 @@ export class ServiceController {
     const result = await this.serviceService.findServiceById(serviceId);
     return result;
   }
+
+  @ApiBearerAuth()
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @Get('get-favorite-services-for-user')
+  async getFavoriteServicesForUser(@Req() req: Request): Promise<ServiceDTO[]> {
+    const result = await this.serviceService.getFavoriteServicesForUser(
+      req.session.user!.id
+    );
+    return result;
+  }
 }

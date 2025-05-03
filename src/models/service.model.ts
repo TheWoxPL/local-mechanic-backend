@@ -54,6 +54,11 @@ export class Service extends Document {
     ref: 'Company'
   })
   company!: string;
+
+  @Prop({
+    required: true
+  })
+  isFavorite!: boolean;
 }
 
 export const ServiceSchema = SchemaFactory.createForClass(Service);
