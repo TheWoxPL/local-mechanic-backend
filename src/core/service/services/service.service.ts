@@ -116,9 +116,13 @@ export class ServiceService {
 
     const shuffled = result.sort(() => Math.random() - 0.5);
     const services: ServiceDTO[] = shuffled.map((service) =>
-      plainToClass(ServiceDTO, service, {
-        excludeExtraneousValues: true
-      })
+      plainToClass(
+        ServiceDTO,
+        { ...service, isFavorite: false },
+        {
+          excludeExtraneousValues: true
+        }
+      )
     );
 
     return services;

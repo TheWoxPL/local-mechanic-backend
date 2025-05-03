@@ -11,7 +11,6 @@ import { AppPermissions, Permissions } from '../../../libs';
 import { Request, Response } from 'express';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { FavoriteService } from '../services/favorite.service';
-import { FavoriteDTO } from '../dtos/favorite.dto';
 import { Favorite } from 'src/models';
 
 @Controller('favorites')
@@ -29,14 +28,25 @@ export class FavoriteController {
   })
   async addToFavorites(
     @Req() req: Request,
+    @Res() res: Response,
     @Body('serviceId') serviceId: string
-  ): Promise<FavoriteDTO> {
-    const result = await this.favoriteService.addToFavorites(
-      serviceId,
-      req.session.user!.id
-    );
-
-    return result;
+  ): Promise<Response> {
+    try {
+      await this.favoriteService.addToFavorites(
+        serviceId,
+        req.session.user!.id
+      );
+      return res
+        .status(200)
+        .json({ message: 'Service successfully added to favorite' });
+    } catch (error) {
+      if (error instanceof HttpException) {
+        return res
+          .status(error.getStatus())
+          .json({ message: error.getResponse() });
+      }
+      return res.status(500).json({ message: 'Internal server error' });
+    }
   }
 
   @ApiBearerAuth()
@@ -58,7 +68,9 @@ export class FavoriteController {
         serviceId,
         req.session.user!.id
       );
-      return res.status(200).json({ message: 'Service successfully removed' });
+      return res
+        .status(200)
+        .json({ message: 'Service successfully removed from favorites' });
     } catch (error) {
       if (error instanceof HttpException) {
         return res
