@@ -6,7 +6,6 @@ import { CreateOrderDto } from '../dtos/create-order.dto';
 import { ServiceService } from 'src/core/service/services/service.service';
 import { plainToInstance } from 'class-transformer';
 import { OrderDto } from '../dtos/order.dto';
-import e from 'express';
 
 @Injectable()
 export class OrdersService {
@@ -14,10 +13,6 @@ export class OrdersService {
     @InjectModel(Order.name) private readonly orderModel: Model<Order>,
     private readonly serviceService: ServiceService
   ) {}
-
-  async test(): Promise<string> {
-    return 'test';
-  }
 
   async isTimeSlotAvailable(
     serviceId: string,
@@ -29,10 +24,8 @@ export class OrdersService {
     }
 
     const bookingTime = Number(service.estimatedTime);
-
     const bookingStart = new Date(scheduledDate);
     bookingStart.setHours(bookingStart.getHours());
-
     const bookingEnd = new Date(scheduledDate);
     bookingEnd.setHours(bookingEnd.getHours() + bookingTime);
 

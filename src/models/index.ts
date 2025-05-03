@@ -11,6 +11,7 @@ import {
 import { TimeUnit, TimeUnitSchema } from './time-unit.model';
 import { Service, ServiceSchema } from './service.model';
 import { Order, OrderSchema } from './order.model';
+import { Favorite, FavoriteSchema } from './favorite.model';
 
 export * from './role.model';
 export * from './user-account.model';
@@ -20,6 +21,7 @@ export * from './service-unit.model';
 export * from './service-availability.model';
 export * from './time-unit.model';
 export * from './order.model';
+export * from './favorite.model';
 
 export const MongooseModels: ModelDefinition[] = [
   {
@@ -66,5 +68,10 @@ export const MongooseModels: ModelDefinition[] = [
     name: Order.name,
     schema: OrderSchema,
     collection: 'orders'
+  },
+  {
+    name: Favorite.name,
+    schema: FavoriteSchema,
+    collection: 'favorites'
   }
 ];
