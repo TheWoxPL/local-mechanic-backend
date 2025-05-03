@@ -6,6 +6,7 @@ import { CreateOrderDto } from '../dtos/create-order.dto';
 import { ServiceService } from 'src/core/service/services/service.service';
 import { plainToInstance } from 'class-transformer';
 import { OrderDto } from '../dtos/order.dto';
+import e from 'express';
 
 @Injectable()
 export class OrdersService {
@@ -65,6 +66,7 @@ export class OrdersService {
       createOrderDto.serviceId,
       createOrderDto.scheduledDate
     );
+
     if (!isAvailable) {
       throw new BadRequestException(
         'This time slot is already booked. Please select a different time.'

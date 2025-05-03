@@ -33,6 +33,8 @@ export class ServiceController {
     return result;
   }
 
+  @ApiBearerAuth()
+  @Permissions(AppPermissions.APP.DISPLAY)
   @Get('get-services/:companyId')
   async getAllServicesByCompanyId(
     @Param('companyId') companyId: string
@@ -65,9 +67,21 @@ export class ServiceController {
     }
   }
 
+  @ApiBearerAuth()
+  @Permissions(AppPermissions.APP.DISPLAY)
   @Get('generate-services-for-user')
   async generateServicesForUser(): Promise<ServiceDTO[]> {
     const result = await this.serviceService.generateServicesForUser();
+    return result;
+  }
+
+  @ApiBearerAuth()
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @Get('get-service-by-id/:serviceId')
+  async getServiceById(
+    @Param('serviceId') serviceId: string
+  ): Promise<ServiceDTO> {
+    const result = await this.serviceService.findServiceById(serviceId);
     return result;
   }
 }
