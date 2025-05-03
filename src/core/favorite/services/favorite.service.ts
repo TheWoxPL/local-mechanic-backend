@@ -45,4 +45,19 @@ export class FavoriteService {
 
     return favoriteDtos;
   }
+  async removeFromFavorites(serviceId: string, userId: string): Promise<void> {
+    const existingFavorite = await this.favoriteModel.findOne({
+      userId: new mongoose.Types.ObjectId(userId),
+      serviceId: new mongoose.Types.ObjectId(serviceId)
+    });
+
+    if (!existingFavorite) {
+      throw new HttpException('This service is not in favorites', 400);
+    }
+
+    await this.favoriteModel.deleteOne({
+      userId: new mongoose.Types.ObjectId(userId),
+      serviceId: new mongoose.Types.ObjectId(serviceId)
+    });
+  }
 }
