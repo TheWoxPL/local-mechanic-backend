@@ -100,7 +100,7 @@ export class ServiceService {
     await this.serviceModel.findByIdAndDelete(serviceId).exec();
   }
 
-  async generateServicesForUser(): Promise<ServiceDTO[]> {
+  async generateServicesForUser(userId: string): Promise<ServiceDTO[]> {
     const result = await this.serviceModel
       .find({})
       .limit(50)
@@ -114,11 +114,17 @@ export class ServiceService {
       .lean()
       .exec();
 
+    const favorites = await this.favoriteService.findFavoritesByUserId(userId);
+    const favoriteServiceIds = new Set(favorites.map((fav) => fav.serviceId));
+
     const shuffled = result.sort(() => Math.random() - 0.5);
     const services: ServiceDTO[] = shuffled.map((service) =>
       plainToClass(
         ServiceDTO,
-        { ...service, isFavorite: false },
+        {
+          ...service,
+          isFavorite: favoriteServiceIds.has(service._id.toString())
+        },
         {
           excludeExtraneousValues: true
         }

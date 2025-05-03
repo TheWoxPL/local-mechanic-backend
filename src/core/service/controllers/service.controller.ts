@@ -70,8 +70,10 @@ export class ServiceController {
   @ApiBearerAuth()
   @Permissions(AppPermissions.APP.DISPLAY)
   @Get('generate-services-for-user')
-  async generateServicesForUser(): Promise<ServiceDTO[]> {
-    const result = await this.serviceService.generateServicesForUser();
+  async generateServicesForUser(@Req() req: Request): Promise<ServiceDTO[]> {
+    const result = await this.serviceService.generateServicesForUser(
+      req.session.user!.id
+    );
     return result;
   }
 
