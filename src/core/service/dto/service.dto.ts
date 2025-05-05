@@ -43,4 +43,7 @@ export class ServiceDTO extends BaseDto {
 
   @Expose()
   isFavorite!: boolean;
+
+  @Expose()
+  imageUrl?: string;
 }

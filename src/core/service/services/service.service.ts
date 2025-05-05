@@ -7,6 +7,7 @@ import { Service } from 'src/models/service.model';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { FavoriteService } from 'src/core/favorite/services/favorite.service';
+import { Express } from 'express';
 
 @Injectable()
 export class ServiceService {
@@ -158,5 +159,46 @@ export class ServiceService {
         { excludeExtraneousValues: true }
       )
     );
+  }
+
+  async uploadImageToService(
+    serviceId: string,
+    file: Express.Multer.File,
+    userId: string
+  ): Promise<ServiceDTO> {
+    const service = await this.findServiceById(serviceId);
+    const company = await this.companiesService.findCompany(service.company.id);
+
+    if (company.owner.id !== userId) {
+      throw new ForbiddenException(
+        'You are not allowed to modify this service'
+      );
+    }
+
+    if (!file) {
+      throw new Error('No file uploaded');
+    }
+
+    const updatedService = await this.serviceModel
+      .findByIdAndUpdate(
+        serviceId,
+        { imageUrl: `/uploads/${file.filename}` },
+        { new: true }
+      )
+      .populate([
+        'currency',
+        'timeUnit',
+        'serviceUnit',
+        'serviceAvailability',
+        'company'
+      ]);
+
+    if (!updatedService) {
+      throw new Error(`Service with ID ${serviceId} not found`);
+    }
+
+    return plainToClass(ServiceDTO, updatedService.toObject(), {
+      excludeExtraneousValues: true
+    });
   }
 }

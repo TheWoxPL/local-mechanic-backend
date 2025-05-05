@@ -7,13 +7,20 @@ import {
   Param,
   Post,
   Req,
-  Res
+  Res,
+  UseInterceptors,
+  UploadedFile
 } from '@nestjs/common';
 import { ServiceService } from '../services/service.service';
 import { AppPermissions, Permissions } from '../../../libs';
 import { Request, Response } from 'express';
 import { ServiceDTO, CreateServiceDTO } from '../dto/';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+// eslint-disable-next-line n/no-extraneous-import
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { Express } from 'express';
 
 @Controller('services')
 export class ServiceController {
@@ -92,6 +99,47 @@ export class ServiceController {
   @Get('get-favorite-services-for-user')
   async getFavoriteServicesForUser(@Req() req: Request): Promise<ServiceDTO[]> {
     const result = await this.serviceService.getFavoriteServicesForUser(
+      req.session.user!.id
+    );
+    return result;
+  }
+
+  @ApiBearerAuth()
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @Post('upload-image-to-service')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          req: Express.Request,
+          file: Express.Multer.File,
+          cb: (error: Error | null, filename: string) => void
+        ) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+
+          cb(
+            null,
+            `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`
+          );
+        }
+      })
+    })
+  )
+  async uploadServiceImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() uploadData: { serviceId: string },
+    @Req() req: Request
+  ): Promise<ServiceDTO> {
+    if (!uploadData || !uploadData.serviceId) {
+      throw new Error('Service ID is required');
+    }
+
+    const result = await this.serviceService.uploadImageToService(
+      uploadData.serviceId,
+      file,
       req.session.user!.id
     );
     return result;

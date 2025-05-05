@@ -59,6 +59,11 @@ export class Service extends Document {
     required: true
   })
   isFavorite!: boolean;
+
+  @Prop({
+    required: false
+  })
+  imageUrl?: string;
 }
 
 export const ServiceSchema = SchemaFactory.createForClass(Service);
