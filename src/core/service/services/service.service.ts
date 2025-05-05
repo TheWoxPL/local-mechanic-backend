@@ -39,6 +39,7 @@ export class ServiceService {
     createServiceDoc.currency = createServiceDTO.currencyId;
     createServiceDoc.serviceUnit = createServiceDTO.serviceUnitId;
     createServiceDoc.company = createServiceDTO.companyId;
+    createServiceDoc.isFavorite = false;
     const result = await createServiceDoc.save();
     return plainToClass(ServiceDTO, result, {
       excludeExtraneousValues: true
