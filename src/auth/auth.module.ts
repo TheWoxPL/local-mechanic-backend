@@ -16,6 +16,6 @@ import { AccountsModule } from 'src/core/accounts/accounts.module';
   ],
   providers: [AuthService, FirebaseService],
   controllers: [AuthController],
-  exports: [AuthService]
+  exports: [AuthService, FirebaseService]
 })
 export class AuthModule {}

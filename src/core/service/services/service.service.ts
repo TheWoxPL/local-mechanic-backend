@@ -8,6 +8,8 @@ import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { FavoriteService } from 'src/core/favorite/services/favorite.service';
 import { Express } from 'express';
+import { FirebaseService } from 'src/auth/firebase.service';
+import { FirebaseBucketDirectory } from 'src/libs';
 
 @Injectable()
 export class ServiceService {
@@ -15,7 +17,8 @@ export class ServiceService {
     @InjectModel(Service.name)
     private serviceModel: Model<Service>,
     private companiesService: CompaniesService,
-    private favoriteService: FavoriteService
+    private favoriteService: FavoriteService,
+    private firebaseService: FirebaseService
   ) {}
 
   async createService(
@@ -165,8 +168,11 @@ export class ServiceService {
     serviceId: string,
     file: Express.Multer.File,
     userId: string
-  ): Promise<ServiceDTO> {
+  ): Promise<string> {
     const service = await this.findServiceById(serviceId);
+    if (!service) {
+      throw new Error(`Service with ID ${serviceId} not found`);
+    }
     const company = await this.companiesService.findCompany(service.company.id);
 
     if (company.owner.id !== userId) {
@@ -179,26 +185,16 @@ export class ServiceService {
       throw new Error('No file uploaded');
     }
 
-    const updatedService = await this.serviceModel
-      .findByIdAndUpdate(
-        serviceId,
-        { imageUrl: `/uploads/${file.filename}` },
-        { new: true }
-      )
-      .populate([
-        'currency',
-        'timeUnit',
-        'serviceUnit',
-        'serviceAvailability',
-        'company'
-      ]);
+    const imageUrl = await this.firebaseService.uploadImageToStorage(
+      file,
+      FirebaseBucketDirectory.SERVICES_IMAGES_OF_SERVICES
+    );
+    await this.serviceModel.findByIdAndUpdate(
+      serviceId,
+      { imageUrl },
+      { new: true }
+    );
 
-    if (!updatedService) {
-      throw new Error(`Service with ID ${serviceId} not found`);
-    }
-
-    return plainToClass(ServiceDTO, updatedService.toObject(), {
-      excludeExtraneousValues: true
-    });
+    return imageUrl;
   }
 }

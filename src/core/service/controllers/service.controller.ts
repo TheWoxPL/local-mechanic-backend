@@ -17,9 +17,6 @@ import { Request, Response } from 'express';
 import { ServiceDTO, CreateServiceDTO } from '../dto/';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-// eslint-disable-next-line n/no-extraneous-import
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { Express } from 'express';
 
 @Controller('services')
@@ -107,32 +104,12 @@ export class ServiceController {
   @ApiBearerAuth()
   @Permissions(AppPermissions.APP.DISPLAY)
   @Post('upload-image-to-service')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          req: Express.Request,
-          file: Express.Multer.File,
-          cb: (error: Error | null, filename: string) => void
-        ) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-
-          cb(
-            null,
-            `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`
-          );
-        }
-      })
-    })
-  )
+  @UseInterceptors(FileInterceptor('file'))
   async uploadServiceImage(
     @UploadedFile() file: Express.Multer.File,
     @Body() uploadData: { serviceId: string },
     @Req() req: Request
-  ): Promise<ServiceDTO> {
+  ): Promise<string> {
     if (!uploadData || !uploadData.serviceId) {
       throw new Error('Service ID is required');
     }
