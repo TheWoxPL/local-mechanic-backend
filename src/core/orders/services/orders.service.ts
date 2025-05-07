@@ -76,7 +76,12 @@ export class OrdersService {
     const savedOrder = await order.save();
     const populatedOrder = await this.orderModel
       .findById(savedOrder._id)
-      .populate('serviceId')
+      .populate({
+        path: 'serviceId',
+        populate: {
+          path: 'company currency timeUnit serviceUnit'
+        }
+      })
       .lean();
 
     return plainToInstance(OrderDto, populatedOrder, {
@@ -88,15 +93,28 @@ export class OrdersService {
   async getOrdersByUserId(userId: string): Promise<OrderDto[]> {
     const orders = await this.orderModel
       .find({ userId })
-      .populate('serviceId')
+      .populate({
+        path: 'serviceId',
+        populate: {
+          path: 'company currency timeUnit serviceUnit'
+        }
+      })
       .sort({ scheduledDate: -1 })
       .lean()
       .exec();
 
-    const orderDtos = plainToInstance(OrderDto, orders, {
+    // Transform MongoDB document structure to match OrderDto structure
+    const transformedOrders = orders.map((order) => {
+      return {
+        ...order,
+        id: order._id,
+        service: order.serviceId
+      };
+    });
+
+    return plainToInstance(OrderDto, transformedOrders, {
       excludeExtraneousValues: true,
       enableImplicitConversion: true
     });
-    return orderDtos;
   }
 }

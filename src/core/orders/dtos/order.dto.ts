@@ -10,7 +10,7 @@ import { ServiceDTO } from 'src/core/service/dto';
 
 export class OrderDto {
   @Expose()
-  @Transform(({ obj }) => obj._id?.toString())
+  @Transform(({ obj }) => obj.id || obj._id?.toString())
   id!: string;
 
   @Expose()
@@ -18,12 +18,7 @@ export class OrderDto {
   userId!: string;
 
   @Expose()
-  @Transform(({ obj }) => {
-    if (obj.serviceId && typeof obj.serviceId === 'object') {
-      return obj.serviceId;
-    }
-    return obj.serviceId;
-  })
+  @Type(() => ServiceDTO)
   service!: ServiceDTO;
 
   @Expose()
