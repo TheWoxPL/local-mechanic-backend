@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { OrdersService } from '../services/orders.service';
 import {
@@ -15,7 +15,7 @@ import { OrderDto } from '../dtos/order.dto';
 @ApiTags('orders')
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(private readonly ordersService: OrdersService) { }
 
   @Permissions(AppPermissions.APP.DISPLAY)
   @ApiBearerAuth()
@@ -46,5 +46,21 @@ export class OrdersController {
   })
   async getOrdersByUserId(@Req() req: Request): Promise<OrderDto[]> {
     return this.ordersService.getOrdersByUserId(req.session.user!.id);
+  }
+
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @ApiBearerAuth()
+  @Delete('resign-order/:orderId')
+  @ApiOperation({ summary: 'Resign from an order' })
+  @ApiResponse({
+    status: 200,
+    description: 'Order has been successfully canceled'
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  async resignOrder(
+    @Param('orderId') orderId: string,
+    @Req() req: Request
+  ): Promise<void> {
+    await this.ordersService.resignOrder(orderId, req.session.user!.id);
   }
 }

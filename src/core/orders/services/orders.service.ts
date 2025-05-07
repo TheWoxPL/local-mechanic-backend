@@ -117,4 +117,22 @@ export class OrdersService {
       enableImplicitConversion: true
     });
   }
+
+  async resignOrder(orderId: string, userId: string): Promise<void> {
+    const order = await this.orderModel.findById(orderId);
+
+    if (!order) {
+      throw new BadRequestException(`Order with id ${orderId} not found`);
+    }
+
+    if (order.userId.toString() !== userId) {
+      throw new BadRequestException('You can only resign from your own orders');
+    }
+
+    if (new Date(order.scheduledDate) < new Date()) {
+      throw new BadRequestException('Cannot resign from a completed order');
+    }
+
+    await this.orderModel.findByIdAndDelete(orderId);
+  }
 }
