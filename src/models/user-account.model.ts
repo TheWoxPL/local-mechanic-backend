@@ -7,7 +7,7 @@ import { BaseClass } from './base.model';
 export class UserAccount extends BaseClass {
   @Prop({
     required: true,
-    unique: true,
+    unique: false,
     trim: true,
     sparse: true,
     maxlength: FieldConstraints.USERNAME.MAX_LENGTH

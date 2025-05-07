@@ -15,7 +15,7 @@ import { OrderDto } from '../dtos/order.dto';
 @ApiTags('orders')
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) { }
+  constructor(private readonly ordersService: OrdersService) {}
 
   @Permissions(AppPermissions.APP.DISPLAY)
   @ApiBearerAuth()
