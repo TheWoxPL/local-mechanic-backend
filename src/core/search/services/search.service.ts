@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { plainToClass } from 'class-transformer';
 import { SearchSuggestionDto } from '../dtos/search-suggestion.dto';
 import { Service } from 'src/models/service.model';
 import { Company } from 'src/models/company.model';
+import { ServiceDTO } from 'src/core/service/dto';
 
 @Injectable()
 export class SearchService {
@@ -59,5 +61,30 @@ export class SearchService {
     }));
 
     return [...serviceResults, ...companyResults].slice(0, 10);
+  }
+
+  async searchServices(query: string): Promise<ServiceDTO[]> {
+    const normalizedQuery = query.toLowerCase().trim();
+
+    const services = await this.serviceModel
+      .find({
+        title: { $regex: normalizedQuery, $options: 'i' }
+      })
+      .populate([
+        'currency',
+        'timeUnit',
+        'serviceUnit',
+        'serviceAvailability',
+        'company'
+      ])
+      .limit(20)
+      .lean()
+      .exec();
+
+    return services.map((service) =>
+      plainToClass(ServiceDTO, service, {
+        excludeExtraneousValues: true
+      })
+    );
   }
 }
