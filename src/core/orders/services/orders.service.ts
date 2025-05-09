@@ -1,40 +1,49 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Order } from '../../../models/order.model';
 import { CreateOrderDto } from '../dtos/create-order.dto';
-import { ServiceService } from 'src/core/service/services/service.service';
 import { plainToInstance } from 'class-transformer';
 import { OrderDto } from '../dtos/order.dto';
+import { Service, Order } from 'src/models';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectModel(Order.name) private readonly orderModel: Model<Order>,
-    private readonly serviceService: ServiceService
+    @InjectModel(Service.name) private readonly serviceModel: Model<Service>
   ) {}
 
   async isTimeSlotAvailable(
     serviceId: string,
     scheduledDate: Date
   ): Promise<boolean> {
-    const service = await this.serviceService.findServiceById(serviceId);
+    const service = await this.serviceModel
+      .findById(serviceId)
+      .populate([
+        'currency',
+        'timeUnit',
+        'serviceUnit',
+        'serviceAvailability',
+        'company'
+      ])
+      .lean()
+      .exec();
+
     if (!service) {
       throw new Error(`Service with id ${serviceId} does not exist`);
     }
 
     const bookingTime = Number(service.estimatedTime);
     const bookingStart = new Date(scheduledDate);
-    bookingStart.setHours(bookingStart.getHours());
     const bookingEnd = new Date(scheduledDate);
-    bookingEnd.setHours(bookingEnd.getHours() + bookingTime);
+    bookingEnd.setMinutes(bookingEnd.getMinutes() + bookingTime);
 
     const existingOrders = await this.orderModel
       .find({
         serviceId: serviceId,
         scheduledDate: {
-          $gte: bookingStart,
-          $lte: bookingEnd
+          $gt: bookingStart,
+          $lt: bookingEnd
         }
       })
       .exec();
@@ -46,9 +55,9 @@ export class OrdersService {
     createOrderDto: CreateOrderDto,
     userId: string
   ): Promise<OrderDto> {
-    const serviceExists = await this.serviceService.doesServiceExistById(
-      createOrderDto.serviceId
-    );
+    const serviceExists = await this.serviceModel.exists({
+      _id: createOrderDto.serviceId
+    });
     if (!serviceExists) {
       throw new Error(
         `Service with id ${createOrderDto.serviceId} does not exist`
@@ -103,7 +112,6 @@ export class OrdersService {
       .lean()
       .exec();
 
-    // Transform MongoDB document structure to match OrderDto structure
     const transformedOrders = orders.map((order) => {
       return {
         ...order,
@@ -134,5 +142,22 @@ export class OrdersService {
     }
 
     await this.orderModel.findByIdAndDelete(orderId);
+  }
+
+  async getOrdersForServiceInRange(
+    serviceId: string,
+    rangeStart: Date,
+    rangeEnd: Date
+  ): Promise<Order[]> {
+    return this.orderModel
+      .find({
+        serviceId: serviceId,
+        scheduledDate: {
+          $gte: rangeStart,
+          $lt: rangeEnd
+        }
+      })
+      .lean()
+      .exec();
   }
 }

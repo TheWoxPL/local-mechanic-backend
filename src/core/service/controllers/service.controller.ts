@@ -14,7 +14,7 @@ import {
 import { ServiceService } from '../services/service.service';
 import { AppPermissions, Permissions } from '../../../libs';
 import { Request, Response } from 'express';
-import { ServiceDTO, CreateServiceDTO } from '../dto/';
+import { ServiceDTO, CreateServiceDTO, AvailableSlotDto } from '../dto/';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
@@ -120,5 +120,14 @@ export class ServiceController {
       req.session.user!.id
     );
     return result;
+  }
+
+  @ApiBearerAuth()
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @Get(':serviceId/available-slots')
+  async getAvailableSlots(
+    @Param('serviceId') serviceId: string
+  ): Promise<AvailableSlotDto[]> {
+    return this.serviceService.getAvailableSlots(serviceId);
   }
 }

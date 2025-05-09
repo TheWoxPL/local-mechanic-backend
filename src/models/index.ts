@@ -22,6 +22,7 @@ export * from './service-availability.model';
 export * from './time-unit.model';
 export * from './order.model';
 export * from './favorite.model';
+export * from './service.model';
 
 export const MongooseModels: ModelDefinition[] = [
   {
