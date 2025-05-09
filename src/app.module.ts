@@ -14,6 +14,7 @@ import { StaticDataModule } from './core/static-data/static-data.module';
 import { ServiceModule } from './core/service/service.module';
 import { OrdersModule } from './core/orders/orders.module';
 import { FavoriteModule } from './core/favorite/favorite.module';
+import { SearchModule } from './core/search/search.module';
 
 @Module({
   imports: [
@@ -35,7 +36,8 @@ import { FavoriteModule } from './core/favorite/favorite.module';
     StaticDataModule,
     ServiceModule,
     OrdersModule,
-    FavoriteModule
+    FavoriteModule,
+    SearchModule
   ],
   controllers: [AppController],
   providers: [
