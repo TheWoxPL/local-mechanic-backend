@@ -5,12 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CompaniesService } from './services/companies.service';
 import { AccountsModule } from '../accounts/accounts.module';
 import { UpsertDefaultsModule } from 'src/upsert-defaults/upsert-defaults.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Company.name, schema: CompanySchema }]),
     AccountsModule,
-    UpsertDefaultsModule
+    UpsertDefaultsModule,
+    AuthModule
   ],
   controllers: [CompaniesController],
   providers: [CompaniesService],

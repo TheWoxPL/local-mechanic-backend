@@ -16,8 +16,15 @@ if (!process.env.FIREBASE_CLIENT_EMAIL) {
   );
 }
 
+if (!process.env.FIREBASE_STORAGE_BUCKET) {
+  throw new Error(
+    'FIREBASE_STORAGE_BUCKET is not defined in the environment variables'
+  );
+}
+
 export const firebaseConfig = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   privateKey: process.env.FIREBASE_PRIVATE_KEY,
-  clientEmail: process.env.FIREBASE_CLIENT_EMAIL
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET
 };

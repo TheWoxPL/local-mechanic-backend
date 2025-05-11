@@ -39,6 +39,9 @@ export class Company extends BaseClass {
     }
   })
   workingHours?: { from: number; to: number };
+
+  @Prop({ required: false })
+  imageUrl?: string;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

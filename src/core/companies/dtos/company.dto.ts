@@ -21,4 +21,6 @@ export class CompanyDTO extends BaseDto {
     from: number;
     to: number;
   };
+  @Expose()
+  imageUrl?: string;
 }
