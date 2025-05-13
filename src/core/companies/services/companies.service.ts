@@ -18,7 +18,7 @@ export class CompaniesService {
     private companyModel: Model<Company>,
     private accountsService: AccountsService,
     private firebaseService: FirebaseService
-  ) {}
+  ) { }
 
   async create(
     createCompanyDto: CreateCompanyDTO,
@@ -34,6 +34,7 @@ export class CompaniesService {
     createCompanyDoc.owners = createCompanyDto.owners;
     createCompanyDoc.verifiedOwners = createCompanyDto.verifiedOwners;
     createCompanyDoc.workingHours = createCompanyDto.workingHours;
+    createCompanyDoc.phoneNumber = createCompanyDto.phoneNumber;
     createCompanyDoc.createdBy = currentUser.id;
     createCompanyDoc.updatedBy = currentUser.id;
 

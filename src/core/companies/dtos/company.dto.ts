@@ -23,4 +23,6 @@ export class CompanyDTO extends BaseDto {
   };
   @Expose()
   imageUrl?: string;
+  @Expose()
+  phoneNumber?: string;
 }

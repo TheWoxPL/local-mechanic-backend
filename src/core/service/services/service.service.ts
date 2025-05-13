@@ -212,7 +212,7 @@ export class ServiceService {
     }
 
     const estimatedTimeInMinutes = parseInt(service.estimatedTime, 10);
-    
+
     if (service.serviceAvailability.name === 'not specified') {
       return [];
     }

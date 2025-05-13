@@ -42,6 +42,9 @@ export class Company extends BaseClass {
 
   @Prop({ required: false })
   imageUrl?: string;
+
+  @Prop({ required: false })
+  phoneNumber?: string;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);
