@@ -212,12 +212,18 @@ export class ServiceService {
     }
 
     const estimatedTimeInMinutes = parseInt(service.estimatedTime, 10);
-
+    
+    if (service.serviceAvailability.name === 'not specified') {
+      return [];
+    }
     // Use company working hours if available, otherwise default to 8AM-4PM
     const workDayStartHour = company.workingHours?.from || 8;
     const workDayEndHour = company.workingHours?.to || 16;
 
     const rangeStart = new Date();
+    if (service.serviceAvailability.name === 'tomorrow') {
+      rangeStart.setDate(rangeStart.getDate() + 1);
+    }
     rangeStart.setHours(0, 0, 0, 0);
     const rangeEnd = new Date(rangeStart);
     // TODO: implement setting maximut booking time in future
