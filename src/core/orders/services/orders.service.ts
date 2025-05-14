@@ -209,12 +209,20 @@ export class OrdersService {
           path: 'company currency timeUnit serviceUnit'
         }
       })
-      .populate('userId', 'email firstName lastName')
       .sort({ scheduledDate: -1 })
       .lean()
       .exec();
 
-    return plainToInstance(OrderDto, orders, {
+    const transformedOrders = orders.map((order) => {
+      return {
+        ...order,
+        id: order._id,
+        service: order.serviceId,
+        serviceId: undefined
+      };
+    });
+
+    return plainToInstance(OrderDto, transformedOrders, {
       excludeExtraneousValues: true,
       enableImplicitConversion: true
     });
