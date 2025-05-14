@@ -1,5 +1,6 @@
 import {
   IsDate,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -7,6 +8,7 @@ import {
 } from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
 import { ServiceDTO } from 'src/core/service/dto';
+import { OrderStatus } from 'src/libs';
 
 export class OrderDto {
   @Expose()
@@ -36,4 +38,9 @@ export class OrderDto {
   @IsNumber()
   @IsNotEmpty()
   price!: number;
+
+  @Expose()
+  @IsEnum(OrderStatus)
+  @IsNotEmpty()
+  orderStatus!: string;
 }

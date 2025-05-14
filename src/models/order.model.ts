@@ -1,14 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { BaseClass } from './base.model';
-
-export enum OrderStatus {
-  PENDING = 'pending',
-  CONFIRMED = 'confirmed',
-  COMPLETED = 'completed',
-  CANCELLED = 'cancelled'
-}
-
+import { OrderStatus } from 'src/libs';
 @Schema({ timestamps: true })
 export class Order extends BaseClass {
   @Prop({
@@ -41,6 +34,14 @@ export class Order extends BaseClass {
     type: Number
   })
   price!: number;
+
+  @Prop({
+    required: true,
+    type: String,
+    enum: Object.values(OrderStatus),
+    default: OrderStatus.PENDING
+  })
+  orderStatus!: string;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
