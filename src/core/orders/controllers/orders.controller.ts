@@ -71,4 +71,85 @@ export class OrdersController {
   ): Promise<void> {
     await this.ordersService.resignOrder(orderId, req.session.user!.id);
   }
+
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @ApiBearerAuth()
+  @Get('get-company-orders/:companyId')
+  @ApiOperation({ summary: 'Get all orders for a specific company' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of orders for the specified company',
+    type: [OrderDto]
+  })
+  @ApiResponse({
+    status: 403,
+    description:
+      'Forbidden - User does not have permission to view orders for this company'
+  })
+  async getCompanyOrders(
+    @Param('companyId') companyId: string,
+    @Req() req: Request
+  ): Promise<OrderDto[]> {
+    return this.ordersService.getOrdersByCompanyId(
+      companyId,
+      req.session.user!.id
+    );
+  }
+
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @ApiBearerAuth()
+  @Get('get-all-company-orders')
+  @ApiOperation({
+    summary: 'Get all orders from all companies owned by the current user'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of orders from all companies owned by the current user',
+    type: [OrderDto]
+  })
+  async getAllCompanyOrders(@Req() req: Request): Promise<OrderDto[]> {
+    return this.ordersService.getAllCompanyOrdersForUser(req.session.user!.id);
+  }
+
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @ApiBearerAuth()
+  @Post('confirm-order/:orderId')
+  @ApiOperation({ summary: 'Confirm an order' })
+  @ApiResponse({
+    status: 200,
+    description: 'Order has been successfully confirmed'
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({
+    status: 403,
+    description:
+      'Forbidden - User does not have permission to confirm orders for this company'
+  })
+  async confirmOrder(
+    @Param('orderId') orderId: string,
+    @Req() req: Request
+  ): Promise<void> {
+    await this.ordersService.confirmOrder(orderId, req.session.user!.id);
+  }
+
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @ApiBearerAuth()
+  @Post('reject-order/:orderId')
+  @ApiOperation({ summary: 'Reject an order' })
+  @ApiResponse({
+    status: 200,
+    description: 'Order has been successfully rejected'
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  @ApiResponse({
+    status: 403,
+    description:
+      'Forbidden - User does not have permission to reject orders for this company'
+  })
+  async rejectOrder(
+    @Param('orderId') orderId: string,
+    @Req() req: Request
+  ): Promise<void> {
+    await this.ordersService.rejectOrder(orderId, req.session.user!.id);
+  }
 }
