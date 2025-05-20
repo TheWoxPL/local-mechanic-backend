@@ -6,12 +6,14 @@ import { SearchSuggestionDto } from '../dtos/search-suggestion.dto';
 import { Service } from 'src/models/service.model';
 import { Company } from 'src/models/company.model';
 import { ServiceDTO } from 'src/core/service/dto';
+import { FavoriteService } from 'src/core/favorite/services/favorite.service';
 
 @Injectable()
 export class SearchService {
   constructor(
     @InjectModel(Service.name) private serviceModel: Model<Service>,
-    @InjectModel(Company.name) private companyModel: Model<Company>
+    @InjectModel(Company.name) private companyModel: Model<Company>,
+    private favoriteService: FavoriteService
   ) {}
 
   async getSuggestions(query: string): Promise<SearchSuggestionDto[]> {
@@ -63,7 +65,7 @@ export class SearchService {
     return [...serviceResults, ...companyResults].slice(0, 10);
   }
 
-  async searchServices(query: string): Promise<ServiceDTO[]> {
+  async searchServices(query: string, userId: string): Promise<ServiceDTO[]> {
     const normalizedQuery = query.toLowerCase().trim();
 
     const services = await this.serviceModel
@@ -80,11 +82,21 @@ export class SearchService {
       .limit(20)
       .lean()
       .exec();
+    // If userId is provided, check if services are in favorites
+    const favorites = await this.favoriteService.findFavoritesByUserId(userId);
+    const favoriteServiceIds = new Set(favorites.map((fav) => fav.serviceId));
 
     return services.map((service) =>
-      plainToClass(ServiceDTO, service, {
-        excludeExtraneousValues: true
-      })
+      plainToClass(
+        ServiceDTO,
+        {
+          ...service,
+          isFavorite: favoriteServiceIds.has(service._id.toString())
+        },
+        {
+          excludeExtraneousValues: true
+        }
+      )
     );
   }
 }

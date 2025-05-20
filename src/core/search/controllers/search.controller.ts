@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Req } from '@nestjs/common';
 import { SearchService } from '../services/search.service';
 import { SearchSuggestionDto } from '../dtos/search-suggestion.dto';
 import { ServiceDTO } from 'src/core/service/dto';
@@ -11,6 +11,7 @@ import {
 } from '@nestjs/swagger';
 import { AppPermissions, Permissions } from '../../../libs';
 import { Service } from 'src/models/service.model';
+import { Request } from 'express';
 
 @ApiTags('search')
 @Controller('search')
@@ -53,8 +54,10 @@ export class SearchController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async searchServices(
-    @Query('query') query: string = ''
+    @Query('query') query: string = '',
+    @Req() req: Request
   ): Promise<ServiceDTO[]> {
-    return this.searchService.searchServices(query);
+    const userId = req.session.user!.id;
+    return this.searchService.searchServices(query, userId);
   }
 }
