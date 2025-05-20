@@ -16,10 +16,11 @@ import { CompanyDTO } from '../dtos/company.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { UpdateCompanyDTO } from '../dtos/update-company.dto'; // Added import
 
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly companiesService: CompaniesService) {}
+  constructor(private readonly companiesService: CompaniesService) { }
 
   @Permissions(AppPermissions.APP.DISPLAY)
   @Post('add-company')
@@ -66,6 +67,22 @@ export class CompaniesController {
       uploadData.companyId,
       file,
       req.session.user!.id
+    );
+    return result;
+  }
+
+  @ApiBearerAuth()
+  @Permissions(AppPermissions.APP.DISPLAY)
+  @Post('update-company/:companyId')
+  async updateCompany(
+    @Param('companyId') companyId: string,
+    @Body() updateCompanyDto: UpdateCompanyDTO,
+    @Req() req: Request
+  ): Promise<CompanyDTO> {
+    const result = await this.companiesService.updateCompany(
+      companyId,
+      updateCompanyDto,
+      req.session.user!.email
     );
     return result;
   }

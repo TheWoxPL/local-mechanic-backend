@@ -10,6 +10,7 @@ import { RoleType } from 'src/libs';
 import { FirebaseService } from 'src/auth/firebase.service';
 import { FirebaseBucketDirectory } from 'src/libs';
 import { Express } from 'express';
+import { UpdateCompanyDTO } from '../dtos/update-company.dto'; // Added import
 
 @Injectable()
 export class CompaniesService {
@@ -41,6 +42,58 @@ export class CompaniesService {
     const result = await createCompanyDoc.save();
     this.accountsService.addRole(RoleType.ENTREPRENEUR, userEmail);
     return plainToClass(CompanyDTO, result, {
+      excludeExtraneousValues: true
+    });
+  }
+
+  async updateCompany(
+    companyId: string,
+    updateCompanyDto: UpdateCompanyDTO,
+    userEmail: string
+  ): Promise<CompanyDTO> {
+    const currentUser = await this.accountsService.findByEmail(userEmail);
+    const company = await this.companyModel.findById(companyId);
+
+    if (!company) {
+      throw new Error(`Company with ID ${companyId} not found`);
+    }
+
+    if (company.owner.toString() !== currentUser.id.toString()) {
+      throw new ForbiddenException(
+        'You are not allowed to modify this company'
+      );
+    }
+
+    if (updateCompanyDto.companyName) {
+      company.companyName = updateCompanyDto.companyName;
+    }
+    if (updateCompanyDto.description) {
+      company.description = updateCompanyDto.description;
+    }
+    if (updateCompanyDto.foundDate) {
+      company.foundDate = updateCompanyDto.foundDate;
+    }
+    if (updateCompanyDto.owners) {
+      company.owners = updateCompanyDto.owners;
+    }
+    if (updateCompanyDto.verifiedOwners) {
+      company.verifiedOwners = updateCompanyDto.verifiedOwners;
+    }
+    if (updateCompanyDto.workingHours) {
+      company.workingHours = updateCompanyDto.workingHours;
+    }
+    if (updateCompanyDto.phoneNumber) {
+      company.phoneNumber = updateCompanyDto.phoneNumber;
+    }
+    if (updateCompanyDto.address) {
+      company.address = updateCompanyDto.address;
+    }
+
+    company.updatedBy = currentUser.id;
+
+    const updatedCompany = await company.save();
+
+    return plainToClass(CompanyDTO, updatedCompany, {
       excludeExtraneousValues: true
     });
   }
