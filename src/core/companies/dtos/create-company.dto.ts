@@ -19,4 +19,6 @@ export class CreateCompanyDTO extends BaseDto {
   };
   @Expose()
   phoneNumber?: string;
+  @Expose()
+  address?: string;
 }
