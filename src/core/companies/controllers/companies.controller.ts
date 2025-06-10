@@ -20,7 +20,7 @@ import { UpdateCompanyDTO } from '../dtos/update-company.dto'; // Added import
 
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly companiesService: CompaniesService) { }
+  constructor(private readonly companiesService: CompaniesService) {}
 
   @Permissions(AppPermissions.APP.DISPLAY)
   @Post('add-company')
