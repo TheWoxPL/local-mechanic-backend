@@ -22,7 +22,7 @@ jobs:
 
       - name: Test Prettier
         run: |
-          npx prettier --check --config .prettierrc --log-level warn .
+          npx prettier --check --log-level warn .
 
       - name: Test ESLint
         run: |
