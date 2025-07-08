@@ -79,6 +79,30 @@ export class Service extends BaseClass {
     max: 5
   })
   averageRating!: number;
+
+  @Prop({
+    required: true,
+    default: 0,
+    min: 10,
+    max: 10000
+  })
+  views!: number;
+
+  @Prop({
+    required: true,
+    default: 0,
+    min: 0,
+    max: 100
+  })
+  orders!: number;
+
+  @Prop({
+    required: true,
+    default: 0,
+    min: 0,
+    max: 100
+  })
+  favorites!: number;
 }
 
 export const ServiceSchema = SchemaFactory.createForClass(Service);

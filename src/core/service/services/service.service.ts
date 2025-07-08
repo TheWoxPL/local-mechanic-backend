@@ -51,6 +51,10 @@ export class ServiceService {
     createServiceDoc.averageRating =
       Math.round((Math.random() * 2 + 3) * 10) / 10;
 
+    createServiceDoc.views = Math.floor(Math.random() * 9991) + 10;
+    createServiceDoc.orders = Math.floor(Math.random() * 101);
+    createServiceDoc.favorites = Math.floor(Math.random() * 101);
+
     createServiceDoc.createdBy = userId;
     createServiceDoc.updatedBy = userId;
 

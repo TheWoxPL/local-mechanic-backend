@@ -52,4 +52,13 @@ export class ServiceDTO extends BaseDto {
 
   @Expose()
   averageRating!: number;
+
+  @Expose()
+  views!: number;
+
+  @Expose()
+  orders!: number;
+
+  @Expose()
+  favorites!: number;
 }
