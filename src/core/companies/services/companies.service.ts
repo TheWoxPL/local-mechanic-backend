@@ -19,7 +19,7 @@ export class CompaniesService {
     private companyModel: Model<Company>,
     private accountsService: AccountsService,
     private firebaseService: FirebaseService
-  ) {}
+  ) { }
 
   async create(
     createCompanyDto: CreateCompanyDTO,
@@ -37,6 +37,11 @@ export class CompaniesService {
     createCompanyDoc.workingHours = createCompanyDto.workingHours;
     createCompanyDoc.phoneNumber = createCompanyDto.phoneNumber;
     createCompanyDoc.address = createCompanyDto.address;
+
+    createCompanyDoc.opinionCount = Math.floor(Math.random() * 991) + 10;
+    createCompanyDoc.averageRating =
+      Math.round((Math.random() * 2 + 3) * 10) / 10;
+
     createCompanyDoc.createdBy = currentUser.id;
     createCompanyDoc.updatedBy = currentUser.id;
 

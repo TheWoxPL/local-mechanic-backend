@@ -21,7 +21,7 @@ export class ServiceService {
     private favoriteService: FavoriteService,
     private firebaseService: FirebaseService,
     private ordersService: OrdersService
-  ) {}
+  ) { }
 
   async createService(
     createServiceDTO: CreateServiceDTO,
@@ -46,6 +46,14 @@ export class ServiceService {
     createServiceDoc.serviceUnit = createServiceDTO.serviceUnitId;
     createServiceDoc.company = createServiceDTO.companyId;
     createServiceDoc.isFavorite = false;
+
+    createServiceDoc.opinionCount = Math.floor(Math.random() * 991) + 10;
+    createServiceDoc.averageRating =
+      Math.round((Math.random() * 2 + 3) * 10) / 10;
+
+    createServiceDoc.createdBy = userId;
+    createServiceDoc.updatedBy = userId;
+
     const result = await createServiceDoc.save();
     return plainToClass(ServiceDTO, result, {
       excludeExtraneousValues: true

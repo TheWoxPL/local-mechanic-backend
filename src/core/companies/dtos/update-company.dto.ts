@@ -21,4 +21,10 @@ export class UpdateCompanyDTO extends BaseDto {
   phoneNumber?: string;
   @Expose()
   address?: string;
+
+  @Expose()
+  opinionCount?: number;
+
+  @Expose()
+  averageRating?: number;
 }

@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
+import mongoose from 'mongoose';
+import { BaseClass } from './base.model';
 
 @Schema()
-export class Service extends Document {
+export class Service extends BaseClass {
   @Prop({ required: true })
   title!: string;
 
@@ -64,6 +65,20 @@ export class Service extends Document {
     required: false
   })
   imageUrl?: string;
+
+  @Prop({
+    required: true,
+    default: 0
+  })
+  opinionCount!: number;
+
+  @Prop({
+    required: true,
+    default: 0,
+    min: 0,
+    max: 5
+  })
+  averageRating!: number;
 }
 
 export const ServiceSchema = SchemaFactory.createForClass(Service);

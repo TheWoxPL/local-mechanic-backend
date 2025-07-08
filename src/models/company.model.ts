@@ -48,6 +48,20 @@ export class Company extends BaseClass {
 
   @Prop({ required: false })
   address?: string;
+
+  @Prop({
+    required: true,
+    default: 0
+  })
+  opinionCount!: number;
+
+  @Prop({
+    required: true,
+    default: 0,
+    min: 0,
+    max: 5
+  })
+  averageRating!: number;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

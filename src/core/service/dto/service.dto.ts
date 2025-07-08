@@ -46,4 +46,10 @@ export class ServiceDTO extends BaseDto {
 
   @Expose()
   imageUrl?: string;
+
+  @Expose()
+  opinionCount!: number;
+
+  @Expose()
+  averageRating!: number;
 }
