@@ -36,6 +36,7 @@ export class CompaniesService {
     createCompanyDoc.verifiedOwners = createCompanyDto.verifiedOwners;
     createCompanyDoc.workingHours = createCompanyDto.workingHours;
     createCompanyDoc.phoneNumber = createCompanyDto.phoneNumber;
+    createCompanyDoc.address = createCompanyDto.address;
     createCompanyDoc.createdBy = currentUser.id;
     createCompanyDoc.updatedBy = currentUser.id;
 
