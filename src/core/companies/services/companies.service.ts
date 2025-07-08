@@ -19,7 +19,7 @@ export class CompaniesService {
     private companyModel: Model<Company>,
     private accountsService: AccountsService,
     private firebaseService: FirebaseService
-  ) { }
+  ) {}
 
   async create(
     createCompanyDto: CreateCompanyDTO,

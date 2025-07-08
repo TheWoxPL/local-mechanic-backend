@@ -21,7 +21,7 @@ export class ServiceService {
     private favoriteService: FavoriteService,
     private firebaseService: FirebaseService,
     private ordersService: OrdersService
-  ) { }
+  ) {}
 
   async createService(
     createServiceDTO: CreateServiceDTO,
